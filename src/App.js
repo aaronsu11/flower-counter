@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Particles from "react-particles-js";
 // import Recaptcha from 'react-recaptcha';
 import { auth } from "./components/firebase/firebase";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+//Imported inidividual components
 //import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
@@ -11,6 +13,11 @@ import Logo from "./components/Logo/Logo";
 //import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from "./components/Rank/Rank";
 import DatasetProfile from "./components/DatasetProfile/DatasetProfile";
+
+//Imported containers
+import { ProtectedRoute } from "./containers/ProtectedRoute/ProtectedRoute";
+import { Home } from "./containers/Home/Home";
+
 import "./App.css";
 
 const hostURL = "https://cryptic-beyond-77196.herokuapp.com/";
@@ -31,7 +38,7 @@ const initialState = {
   input: "",
   imageUrl: "",
   box: {},
-  route: "casual",
+  isAuth: false,
   isSignedIn: false,
   user: {
     id: "",
@@ -48,8 +55,10 @@ class App extends Component {
     this.state = initialState;
   }
 
-  loadUser = data => {
+  login = (data, isAuth) => {
     this.setState({
+      isAuth: isAuth,
+      isSignedIn: true,
       user: {
         id: data.id,
         name: data.name,
@@ -58,29 +67,20 @@ class App extends Component {
         joined: data.joined
       }
     });
+    console.log(this.state);
   };
 
-  calculateFaceLocation = data => {
-    const clarifaiFace =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById("inputimage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - clarifaiFace.right_col * width,
-      bottomRow: height - clarifaiFace.bottom_row * height
-    };
+  logout = () => {
+    this.setState(initialState);
+    if (this.isAuth) {
+      auth.signOut();
+      this.setState({ isAuth: false });
+    }
   };
 
-  displayFaceBox = box => {
-    this.setState({ box: box });
-  };
-
-  onInputChange = event => {
-    this.setState({ input: event.target.value });
-  };
+  // onInputChange = event => {
+  //   this.setState({ input: event.target.value });
+  // };
 
   onButtonSubmit = () => {
     // this.setState({imageUrl: this.state.input});
@@ -112,109 +112,77 @@ class App extends Component {
     //   .catch(err => console.log(err));
   };
 
-  onRouteChange = route => {
-    switch (route) {
-      case "casual":
-        this.setState(initialState);
-        auth.signOut();
-        break;
-      case "home":
-        this.setState({ isSignedIn: true });
-        break;
-      default:
-        this.setState(initialState);
-        break;
-    }
-    this.setState({ route: route });
-  };
+  componentDidMount = () => {};
 
-  renderSelect = () => {
-    //const { imageUrl, route, box } = this.state;
-    const { route } = this.state;
-
-    switch (route) {
-      case "casual":
-        return (
-          <div>
-            <Logo />
-            <DatasetProfile onRouteChange={this.onRouteChange} />
-
-            {/*
-            <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
-            />
-            <FaceRecognition box={box} imageUrl={imageUrl} />
-            */}
-          </div>
-        );
-
-      case "home":
-        return (
-          <div>
-            <Logo />
-            <Rank
-              name={this.state.user.name}
-              entries={this.state.user.entries}
-            />
-
-            {/*
-            <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonSubmit={this.onButtonSubmit}
-            />
-            <FaceRecognition box={box} imageUrl={imageUrl} />        
-            */}
-          </div>
-        );
-
-      case "signin":
-        return (
-          <div>
-            <Signin
-              hostURL={hostURL}
-              loadUser={this.loadUser}
-              onRouteChange={this.onRouteChange}
-            />
-          </div>
-        );
-
-      case "register":
-        return (
-          <div>
-            <Register
-              hostURL={hostURL}
-              loadUser={this.loadUser}
-              onRouteChange={this.onRouteChange}
-            />
-          </div>
-        );
-
-      default:
-        return (
-          <div>
-            <p> No Match </p>
-          </div>
-        );
-    }
-  };
-
-  componentDidMount = () => {
-    console.log(this.state);
-  };
   // Main render function
   render() {
     const { isSignedIn } = this.state;
-
     return (
-      <div className="App">
-        <Particles className="particles" params={particlesOptions} />
-        <Navigation
-          isSignedIn={isSignedIn}
-          onRouteChange={this.onRouteChange}
-        />
-        {this.renderSelect()}
-      </div>
+      <Router>
+        <div className="App">
+          <Particles className="particles" params={particlesOptions} />
+          <Navigation
+            isSignedIn={isSignedIn}
+            logout={this.logout}
+            // onRouteChange={this.onRouteChange}
+          />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <DatasetProfile
+                  {...props}
+                  // onRouteChange={this.onRouteChange}
+                />
+              )}
+            />
+            <ProtectedRoute
+              exact
+              path="/home"
+              component={Home}
+              isSignedIn={isSignedIn}
+            />
+            <Route
+              path="/home/:id"
+              render={props => (
+                <Rank
+                  {...props}
+                  name={this.state.user.name}
+                  entries={this.state.user.entries}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/signin"
+              render={props => (
+                <Signin
+                  {...props}
+                  hostURL={hostURL}
+                  isSignedIn={isSignedIn}
+                  login={this.login}
+                  // onRouteChange={this.onRouteChange}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/register"
+              render={props => (
+                <Register
+                  {...props}
+                  hostURL={hostURL}
+                  isSignedIn={isSignedIn}
+                  login={this.login}
+                  // onRouteChange={this.onRouteChange}
+                />
+              )}
+            />
+            <Route path="*" component={() => "404 NOT FOUND"} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }

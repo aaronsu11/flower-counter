@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Recaptcha from 'react-recaptcha';
+import Recaptcha from "react-recaptcha";
 import "./DatasetProfile.css";
 
-import ImageUpload from '../ImageUpload/ImageUpload';
+import ImageUpload from "../ImageUpload/ImageUpload";
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -21,8 +21,8 @@ const formValid = ({ formErrors, recaptcha, ...rest }) => {
     val === null && (valid = false);
   });
 
-  if(recaptcha === false){
-    alert('Please verify recaptcha');
+  if (recaptcha === false) {
+    alert("Please verify recaptcha");
     valid = false;
   }
 
@@ -52,7 +52,7 @@ class DatasetProfile extends Component {
         variety: "",
         EL_stage: "",
         vineyard: "",
-        block_id: "",
+        block_id: ""
       }
     };
   }
@@ -61,7 +61,7 @@ class DatasetProfile extends Component {
     e.preventDefault();
 
     if (formValid(this.state)) {
-      this.setState({dataSaved: true});
+      this.setState({ dataSaved: true });
       console.log(`
         --SUBMITTING--
         Data Saved: ${this.state.dataSaved}
@@ -87,12 +87,10 @@ class DatasetProfile extends Component {
 
     switch (name) {
       case "firstName":
-        formErrors.firstName =
-          value.length < 1 ? "Minimum 1 characater" : "";
+        formErrors.firstName = value.length < 1 ? "Minimum 1 characater" : "";
         break;
       case "lastName":
-        formErrors.lastName =
-          value.length < 1 ? "Minimum 1 characater" : "";
+        formErrors.lastName = value.length < 1 ? "Minimum 1 characater" : "";
         break;
       case "email":
         formErrors.email = emailRegex.test(value)
@@ -108,37 +106,43 @@ class DatasetProfile extends Component {
     this.setState({ formErrors, [name]: value });
   };
 
-
   renderProfile = () => {
     const { formErrors } = this.state;
     const { onRouteChange } = this.props;
-    if(this.state.dataSaved){
+    if (this.state.dataSaved) {
       return (
         <div className="wrapper mb3">
           <p className="f6 white db">Profile saved</p>
           <div className="profile tl">
-              <label htmlFor="firstName">First Name: {this.state.firstName}</label>
-              <label htmlFor="lastName">Last Name: {this.state.lastName}</label>
-              <label htmlFor="email">Email: {this.state.email}</label>
-              <label htmlFor="date">Date: {this.state.date}</label>
-              <label htmlFor="variety">Variety: {this.state.variety}</label>
-              <label htmlFor="EL_stage">EL Stage: {this.state.EL_stage}</label>
-              <label htmlFor="vineyard">Vineyard: {this.state.vineyard}</label>
-              <label htmlFor="block_id">Block ID: {this.state.block_id}</label>
-              <button className="center" onClick={() => this.setState({dataSaved: false})}>Edit</button>
-              <ImageUpload />
+            <label htmlFor="firstName">
+              First Name: {this.state.firstName}
+            </label>
+            <label htmlFor="lastName">Last Name: {this.state.lastName}</label>
+            <label htmlFor="email">Email: {this.state.email}</label>
+            <label htmlFor="date">Date: {this.state.date}</label>
+            <label htmlFor="variety">Variety: {this.state.variety}</label>
+            <label htmlFor="EL_stage">EL Stage: {this.state.EL_stage}</label>
+            <label htmlFor="vineyard">Vineyard: {this.state.vineyard}</label>
+            <label htmlFor="block_id">Block ID: {this.state.block_id}</label>
+            <button
+              className="center"
+              onClick={() => this.setState({ dataSaved: false })}
+            >
+              Edit
+            </button>
+            <ImageUpload />
           </div>
         </div>
-        );
-    }
-    else {
+      );
+    } else {
       return (
         <div className="wrapper mb3">
-          <p className="f6 white db">Please create your dateset profile first</p>
+          <p className="f6 white db">
+            Please create your dateset profile first
+          </p>
           <div className="profile form-wrapper tl">
             <h1>Create Dataset</h1>
             <form onSubmit={this.handleSubmit}>
-
               <div className="firstName">
                 <label htmlFor="firstName">First Name</label>
                 <input
@@ -203,7 +207,6 @@ class DatasetProfile extends Component {
                 )}
               </div>
 
-
               <div className="variety mt2">
                 <label htmlFor="variety">Variety</label>
                 <select
@@ -262,7 +265,6 @@ class DatasetProfile extends Component {
                 />
               </div>
 
-
               <div className="createAccount">
                 <Recaptcha
                   sitekey="6LfWDbQUAAAAAMBcLHa6ld7lnDowMvC9gA-EKxga"
@@ -272,32 +274,33 @@ class DatasetProfile extends Component {
                 />
                 <button type="submit">Save Dataset</button>
                 <div className="lh-copy mt0">
-                  <p  onClick={() => onRouteChange('signin')} className="f6 link dim black db pointer">Already have an account?</p>
+                  <p
+                    onClick={() => onRouteChange("signin")}
+                    className="f6 link dim black db pointer"
+                  >
+                    Already have an account?
+                  </p>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        );
+      );
     }
-  }
+  };
 
   recaptchaLoaded = () => {
     console.log("recaptcha loaded");
-  }
+  };
 
-  verifyRecaptcha = (res) => {
-    if(res){
-      this.setState({recaptcha: true});
+  verifyRecaptcha = res => {
+    if (res) {
+      this.setState({ recaptcha: true });
     }
-  }
+  };
 
   render() {
-    return (
-      <div>
-        {this.renderProfile()}
-      </div>
-    );
+    return <div>{this.renderProfile()}</div>;
   }
 }
 
