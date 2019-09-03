@@ -32,7 +32,8 @@ class Home extends Component {
       return (
         <div>
           <DatasetProfile user={user} isSaved={this.isSaved} />
-          {dataSaved === true ? <ImageUpload /> : <div></div>}
+          <ImageUpload />
+          {/* {dataSaved === true ? <ImageUpload /> : <div></div>} */}
         </div>
       );
     }

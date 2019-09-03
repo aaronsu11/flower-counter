@@ -1,23 +1,20 @@
 import React, { Component } from "react";
 import Particles from "react-particles-js";
-// import Recaptcha from 'react-recaptcha';
 import { auth } from "./components/firebase/firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 //Imported inidividual components
-//import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 // import Logo from "./components/Logo/Logo";
-//import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from "./components/Rank/Rank";
-// import DatasetProfile from "./components/DatasetProfile/DatasetProfile";
 
 //Imported containers
 import { ProtectedRoute } from "./containers/ProtectedRoute";
 import Home from "./containers/Home";
 
+//Imported style files
 import "./App.css";
 
 const hostURL = "https://cryptic-beyond-77196.herokuapp.com/";
@@ -77,13 +74,9 @@ class App extends Component {
     }
   };
 
-  // onInputChange = event => {
-  //   this.setState({ input: event.target.value });
-  // };
-
   componentDidMount = () => {};
 
-  // Main render function
+  // Main routing function
   render() {
     const { user, isSignedIn } = this.state;
     return (
