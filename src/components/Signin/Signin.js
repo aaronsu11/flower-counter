@@ -55,14 +55,14 @@ class Signin extends React.Component {
       this.setState({ firebaseAuth: authState });
       if (authState) {
         this.setState({ signInEmail: user.email });
-        console.log(user.email);
+        // console.log(user.email);
         this.onSubmitSignIn();
       }
     });
   };
 
   render() {
-    const { onRouteChange } = this.props;
+    // console.log(this.props);
     return (
       <article className="br3 ba bg-white b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
         <main className="pa4 black-80">
@@ -117,7 +117,7 @@ class Signin extends React.Component {
 
             <div className="lh-copy mt3">
               <p
-                onClick={() => onRouteChange("register")}
+                // onClick={() => onRouteChange("register")}
                 className="f6 link dim black db pointer"
               >
                 Register

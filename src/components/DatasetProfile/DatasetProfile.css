@@ -81,7 +81,8 @@ input.error {
   display: relative;
 }
 
-.firstName {
+.firstName,
+.name {
   margin-right: 1%;
 }
 
@@ -91,6 +92,7 @@ input.error {
 
 .firstName,
 .lastName,
+.name,
 .email,
 .password {
   display: flex;
@@ -99,8 +101,9 @@ input.error {
 }
 
 .firstName,
-.lastName {
-  width: 49%;
+.lastName,
+.name {
+  width: 100%;
 }
 
 .email,
@@ -115,7 +118,7 @@ input.error {
   align-items: center;
 }
 
-.profile button {
+.button {
   background-color: #519e8a;
   color: #fff;
   border: 2px solid #fff;
@@ -129,13 +132,13 @@ input.error {
   align-items: center;
 }
 
-.profile button:hover {
+.button:hover {
   color: #519e8a;
   background-color: #fff;
   border: 2px solid #519e8a;
 }
 
-.profile small {
+.small {
   color: #999;
   font-weight: lighter;
 }

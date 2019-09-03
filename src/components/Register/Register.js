@@ -1,9 +1,22 @@
 import React from "react";
+import Recaptcha from "react-recaptcha";
+
+const formValid = ({ recaptcha }) => {
+  let valid = true;
+
+  if (recaptcha === false) {
+    alert("Please verify recaptcha");
+    valid = false;
+  }
+
+  return valid;
+};
 
 class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      recaptcha: false,
       email: "",
       password: "",
       name: ""
@@ -23,23 +36,35 @@ class Register extends React.Component {
   };
 
   onSubmitRegister = () => {
-    fetch(this.props.hostURL + "register", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-        name: this.state.name
+    console.log(this.state);
+    if (formValid(this.state)) {
+      fetch(this.props.hostURL + "register", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password,
+          name: this.state.name
+        })
       })
-    })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          this.props.login(user, false);
-          // this.props.onRouteChange("home");
-          this.props.history.push("/home");
-        }
-      });
+        .then(response => response.json())
+        .then(user => {
+          if (user.id) {
+            this.props.login(user, false);
+            // this.props.onRouteChange("home");
+            this.props.history.push("/home");
+          }
+        });
+    } else {
+      // console.log(this.state);
+      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
+    }
+  };
+
+  verifyRecaptcha = res => {
+    if (res) {
+      this.setState({ recaptcha: true });
+    }
   };
 
   render() {
@@ -91,6 +116,12 @@ class Register extends React.Component {
                 />
               </div>
             </fieldset>
+            <Recaptcha
+              sitekey="6LfWDbQUAAAAAMBcLHa6ld7lnDowMvC9gA-EKxga"
+              // render="explicit"
+              // onloadCallback={this.recaptchaLoaded}
+              verifyCallback={this.verifyRecaptcha}
+            />
             <div className="">
               <input
                 onClick={this.onSubmitRegister}
