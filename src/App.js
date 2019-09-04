@@ -3,6 +3,8 @@ import Particles from "react-particles-js";
 import { auth } from "./components/firebase/firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+// import Foundation, { Button, Colors } from "react-foundation";
+
 //Imported inidividual components
 import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
@@ -13,6 +15,7 @@ import Rank from "./components/Rank/Rank";
 //Imported containers
 import { ProtectedRoute } from "./containers/ProtectedRoute";
 import Home from "./containers/Home";
+import Dashboard from "./containers/Dashboard";
 
 //Imported style files
 import "./App.css";
@@ -82,7 +85,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Particles className="particles" params={particlesOptions} />
+          {/* <Particles className="particles" params={particlesOptions} /> */}
           <Navigation isSignedIn={isSignedIn} logout={this.logout} />
           <Switch>
             <Route
@@ -96,6 +99,13 @@ class App extends Component {
               exact
               path="/home"
               component={Home}
+              user={user}
+              isSignedIn={isSignedIn}
+            />
+            <ProtectedRoute
+              exact
+              path="/dashboard"
+              component={Dashboard}
               user={user}
               isSignedIn={isSignedIn}
             />

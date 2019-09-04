@@ -158,8 +158,11 @@ class DatasetProfile extends Component {
           <div>
             <ProfileCard state={this.state} />
             <button
-              className="button center"
-              onClick={() => this.setState({ dataSaved: false })}
+              className="pbutton center"
+              onClick={() => {
+                this.setState({ dataSaved: false });
+                // this.props.isSaved(false);
+              }}
             >
               Edit
             </button>
@@ -251,7 +254,7 @@ class DatasetProfile extends Component {
               </div>
 
               <div className="createAccount">
-                <button className="button" type="submit">
+                <button className="pbutton" type="submit">
                   Save Dataset
                 </button>
                 <div className="lh-copy mt0">
