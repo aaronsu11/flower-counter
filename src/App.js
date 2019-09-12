@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import Particles from "react-particles-js";
+// import Particles from "react-particles-js";
 import { auth } from "./components/firebase/firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // import Foundation, { Button, Colors } from "react-foundation";
+
+//Imported style files (Zurb Foundation framework)
+import "./App.scss";
 
 //Imported inidividual components
 import Navigation from "./components/Navigation/Navigation";
@@ -17,26 +20,13 @@ import { ProtectedRoute } from "./containers/ProtectedRoute";
 import Home from "./containers/Home";
 import Dashboard from "./containers/Dashboard";
 
-//Imported style files
-import "./App.css";
+// const hostURL = "https://cryptic-beyond-77196.herokuapp.com/";
+const hostURL = "https://affable-tangent-247104.appspot.com/";
 
-const hostURL = "https://cryptic-beyond-77196.herokuapp.com/";
-
-const particlesOptions = {
-  particles: {
-    number: {
-      value: 30,
-      density: {
-        enable: true,
-        value_area: 800
-      }
-    }
-  }
-};
+// const particlesOptions = {
+// };
 
 const initialState = {
-  input: "",
-  box: {},
   isAuth: false,
   isSignedIn: false,
   user: {
@@ -55,6 +45,8 @@ class App extends Component {
   }
 
   login = (data, isAuth) => {
+    localStorage.setItem("dataSaved", false);
+    localStorage.setItem("saveTime", Date.now());
     this.setState({
       isAuth: isAuth,
       isSignedIn: true,
@@ -70,11 +62,8 @@ class App extends Component {
   };
 
   logout = () => {
+    auth.signOut();
     this.setState(initialState);
-    if (this.isAuth) {
-      auth.signOut();
-      this.setState({ isAuth: false });
-    }
   };
 
   componentDidMount = () => {};
@@ -84,67 +73,65 @@ class App extends Component {
     const { user, isSignedIn } = this.state;
     return (
       <Router>
-        <div className="App">
-          {/* <Particles className="particles" params={particlesOptions} /> */}
-          <Navigation isSignedIn={isSignedIn} logout={this.logout} />
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={props => (
-                <Home {...props} user={user} isSignedIn={isSignedIn} />
-              )}
-            />
-            <ProtectedRoute
-              exact
-              path="/home"
-              component={Home}
-              user={user}
-              isSignedIn={isSignedIn}
-            />
-            <ProtectedRoute
-              exact
-              path="/dashboard"
-              component={Dashboard}
-              user={user}
-              isSignedIn={isSignedIn}
-            />
-            <Route
-              path="/home/:id"
-              render={props => (
-                <Rank
-                  {...props}
-                  name={this.state.user.name}
-                  entries={this.state.user.entries}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/signin"
-              render={props => (
-                <Signin
-                  {...props}
-                  hostURL={hostURL}
-                  isSignedIn={isSignedIn}
-                  login={this.login}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/register"
-              render={props => (
-                <Register
-                  {...props}
-                  hostURL={hostURL}
-                  isSignedIn={isSignedIn}
-                  login={this.login}
-                />
-              )}
-            />
-            <Route path="*" component={() => "404 NOT FOUND"} />
-          </Switch>
+        <div className="App" id="hero">
+          <div id="hero-overlay">
+            <Navigation isSignedIn={isSignedIn} logout={this.logout} />
+            {/* <Particles className="particles" params={particlesOptions} /> */}
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Home {...props} user={user} isSignedIn={isSignedIn} />
+                )}
+              />
+              <ProtectedRoute
+                exact
+                path="/home"
+                component={Home}
+                user={user}
+                isSignedIn={isSignedIn}
+              />
+              <ProtectedRoute
+                exact
+                path="/dashboard"
+                component={Dashboard}
+                user={user}
+                isSignedIn={isSignedIn}
+              />
+              <Route
+                path="/home/:id"
+                render={props => (
+                  <Rank {...props} name={user.name} entries={user.entries} />
+                )}
+              />
+              <Route
+                exact
+                path="/signin"
+                render={props => (
+                  <Signin
+                    {...props}
+                    hostURL={hostURL}
+                    isSignedIn={isSignedIn}
+                    login={this.login}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/register"
+                render={props => (
+                  <Register
+                    {...props}
+                    hostURL={hostURL}
+                    isSignedIn={isSignedIn}
+                    login={this.login}
+                  />
+                )}
+              />
+              <Route path="*" component={() => "404 NOT FOUND"} />
+            </Switch>
+          </div>
         </div>
       </Router>
     );

@@ -69,70 +69,85 @@ class Register extends React.Component {
 
   render() {
     return (
-      <article className="br3 ba bg-white b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
-        <main className="pa4 black-80">
-          <div className="measure">
-            <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-              <legend className="f1 fw6 ph0 mh0">Register</legend>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6" htmlFor="name">
-                  Name
-                </label>
+      <div className="row column padding-top-3">
+        <div className="login-box">
+          <div className="row collapse expanded">
+            <div className="small-12 medium-6 column small-order-2 medium-order-1">
+              <div className="login-box-form-section">
+                <h1 className="login-box-title">Sign up</h1>
                 <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="login-box-input"
                   type="text"
                   name="name"
+                  placeholder="Name"
                   id="name"
                   maxLength="100"
                   onChange={this.onNameChange}
                   required
                 />
-              </div>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6" htmlFor="email-address">
-                  Email
-                </label>
                 <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="login-box-input"
                   type="email"
                   name="email-address"
+                  placeholder="E-mail"
                   id="email-address"
                   onChange={this.onEmailChange}
                   required
                 />
-              </div>
-              <div className="mv3">
-                <label className="db fw6 lh-copy f6" htmlFor="password">
-                  Password
-                </label>
                 <input
-                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
+                  className="login-box-input"
                   type="password"
                   name="password"
+                  placeholder="Password"
                   id="password"
                   minLength="3"
                   onChange={this.onPasswordChange}
                   required
                 />
+                <input
+                  className="login-box-input"
+                  type="password"
+                  name="password2"
+                  placeholder="Retype password"
+                />
+                <Recaptcha
+                  className="margin-bottom-1"
+                  sitekey="6LfWDbQUAAAAAMBcLHa6ld7lnDowMvC9gA-EKxga"
+                  // render="explicit"
+                  // onloadCallback={this.recaptchaLoaded}
+                  verifyCallback={this.verifyRecaptcha}
+                />
+                <input
+                  className="login-box-submit-button"
+                  type="submit"
+                  name="signup_submit"
+                  value="Sign me up"
+                  onClick={this.onSubmitRegister}
+                />
               </div>
-            </fieldset>
-            <Recaptcha
-              sitekey="6LfWDbQUAAAAAMBcLHa6ld7lnDowMvC9gA-EKxga"
-              // render="explicit"
-              // onloadCallback={this.recaptchaLoaded}
-              verifyCallback={this.verifyRecaptcha}
-            />
-            <div className="">
-              <input
-                onClick={this.onSubmitRegister}
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-                type="submit"
-                value="Register"
-              />
+              <div className="or">OR</div>
+            </div>
+            <div className="small-12 medium-6 column small-order-1 medium-order-2 login-box-social-section">
+              <div className="login-box-social-section-inner">
+                <span className="login-box-social-headline">
+                  Sign up with
+                  <br />
+                  your social network
+                </span>
+                <div className="login-box-social-button-facebook">
+                  Sign up with facebook
+                </div>
+                <div className="login-box-social-button-twitter">
+                  Sign up with Twitter
+                </div>
+                <div className="login-box-social-button-google">
+                  Sign up with Google+
+                </div>
+              </div>
             </div>
           </div>
-        </main>
-      </article>
+        </div>
+      </div>
     );
   }
 }

@@ -1,0 +1,272 @@
+// .work-feature-block {
+//   padding: 10px 0;
+//   border-top: 1px solid #cacaca;
+//   border-bottom: 0px solid #cacaca;
+// }
+// .work-feature-block-image {
+//   display: block;
+//   margin: auto;
+//   padding: 0px 0;
+// }
+
+$work-feature-image-offset-padding: 10px 0;
+
+.work-feature-block {
+  padding: 10px 0;
+  border-top: 1px solid $medium-gray;
+  border-bottom: 1px solid $medium-gray;
+  background-color: rgba($color: #ffffff, $alpha: 0.9);
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  height: 560px;
+  position: relative;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.work-feature-block-image {
+  display: block;
+  margin: auto;
+  padding: $work-feature-image-offset-padding;
+}
+
+// .work-feature-block-image img {
+//   display: flex; /* new */
+//   justify-content: center; /* new */
+//   align-items: center; /* new */
+// }
+
+.clean-list {
+  list-style: none;
+  text-align: left;
+}
+
+.todo-list-card {
+  background-color: #fefefe;
+  border-radius: 0;
+}
+
+.todo-list-card .card-divider {
+  border-bottom: 2px solid #cacaca;
+  background: inherit;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+.todo-list-card .card-divider h3 {
+  margin-bottom: 0;
+}
+
+.todo-list-card .card-divider .close-button {
+  position: inherit;
+}
+
+.todo-list-card ul {
+  text-align: left;
+  list-style-type: none;
+  margin: 0;
+}
+
+.todo-list-card ul li {
+  background-color: #e6e6e6;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.todo-list-card ul input[type="checkbox"] {
+  position: absolute;
+  visibility: hidden;
+}
+
+.todo-list-card ul input[type="checkbox"] ~ label {
+  position: relative;
+  margin-right: 2rem;
+}
+
+@mixin clipped-circle-graph-circle($size) {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  left: calc(50% - #{$size/2});
+  top: calc(50% - #{$size/2});
+  width: $size;
+  height: $size;
+}
+
+$clipped-circle-graph-size: rem-calc(180);
+$clipped-circle-graph-percent-number-size: rem-calc(24);
+$clipped-circle-graph-percent-unit-size: rem-calc(16);
+$clipped-circle-graph-empty-color: $dark-gray;
+$clipped-circle-background-color: $light-gray;
+$clipped-circle-graph-fill-color: $primary-color;
+$clipped-circle-clip-size: rem-calc(80);
+
+.clipped-circle-graph {
+  width: $clipped-circle-graph-size;
+  height: $clipped-circle-graph-size;
+  border-radius: 50%;
+  background-color: $clipped-circle-graph-empty-color;
+  position: relative;
+
+  &.gt-50 {
+    background-color: $clipped-circle-graph-fill-color;
+  }
+  &:after {
+    content: "";
+    @include horizontal-center;
+    bottom: 19px;
+    background: $clipped-circle-background-color;
+    height: $clipped-circle-clip-size;
+    width: $clipped-circle-clip-size;
+    z-index: 3;
+    transform: rotate(45deg) translate3d(0, 0, 0);
+    transform-origin: -30px 15px;
+  }
+}
+
+.clipped-circle-graph-progress {
+  @include clipped-circle-graph-circle($clipped-circle-graph-size);
+  clip: rect(
+    0,
+    $clipped-circle-graph-size,
+    $clipped-circle-graph-size,
+    #{$clipped-circle-graph-size/2}
+  );
+  transform: rotate(-180deg) perspective(0);
+
+  .clipped-circle-graph-progress-fill {
+    @include clipped-circle-graph-circle($clipped-circle-graph-size);
+    clip: rect(
+      0,
+      #{$clipped-circle-graph-size/2},
+      $clipped-circle-graph-size,
+      0
+    );
+    background: $clipped-circle-graph-fill-color;
+    transform: rotate(60deg);
+  }
+
+  .gt-50 & {
+    clip: rect(
+      0,
+      #{$clipped-circle-graph-size/2},
+      $clipped-circle-graph-size,
+      0
+    );
+
+    .clipped-circle-graph-progress-fill {
+      clip: rect(
+        0,
+        $clipped-circle-graph-size,
+        $clipped-circle-graph-size,
+        #{$clipped-circle-graph-size/2}
+      );
+      background: $clipped-circle-graph-empty-color;
+    }
+  }
+}
+.clipped-circle-graph-percents {
+  @include clipped-circle-graph-circle(#{$clipped-circle-graph-size/1.45});
+  background: $clipped-circle-background-color;
+  text-align: center;
+  display: table;
+  z-index: 4;
+
+  .clipped-circle-graph-percents-number {
+    display: block;
+    font-size: $clipped-circle-graph-percent-number-size;
+    font-weight: bold;
+    color: $clipped-circle-graph-fill-color;
+  }
+
+  .clipped-circle-graph-percents-units {
+    display: block;
+    font-size: $clipped-circle-graph-percent-unit-size;
+    font-weight: bold;
+  }
+}
+.clipped-circle-graph-percents-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  line-height: 0;
+
+  span {
+    line-height: 1;
+  }
+}
+
+.dashboard-table {
+  border-collapse: collapse;
+  margin-bottom: 0;
+
+  td {
+    border-bottom: 1px dashed lighten($medium-gray, 5%);
+  }
+
+  a {
+    color: darken($dark-gray, 40%);
+  }
+
+  .bold {
+    color: $black;
+    font-weight: 600;
+  }
+
+  thead {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid $light-gray;
+    color: $dark-gray;
+    font-size: 0.8rem;
+  }
+
+  thead a {
+    color: $dark-gray;
+  }
+
+  tbody {
+    border: 1px solid darken($light-gray, 2%);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.15);
+
+    tr {
+      transition: all 0.5s ease;
+
+      &:hover {
+        background: #fcf7da;
+        transition: all 0.5s ease;
+      }
+      &:nth-child(even) {
+        background: none;
+      }
+    }
+  }
+  tr:last-child td {
+    border-bottom: 0;
+  }
+}
+
+.dashboard-table-text {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
+
+.dashboard-table-timestamp {
+  color: darken($light-gray, 30%);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.dashboard-table-image {
+  display: inline;
+  margin-right: 1rem;
+  margin-top: 0.6rem;
+  max-width: none;
+}

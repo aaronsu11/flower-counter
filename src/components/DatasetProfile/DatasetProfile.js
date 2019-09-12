@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import "./DatasetProfile.css";
+import "./DatasetProfile.scss";
 
-import { ProfileCard } from "./ProfileCard";
 // import ImageUpload from "../ImageUpload/ImageUpload";
 
 const emailRegex = RegExp(
@@ -28,15 +27,13 @@ class DatasetProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSaved: false,
-      recaptcha: false,
-      name: "",
-      email: "",
-      date: "",
-      variety: "chardonay",
-      EL_stage: "15",
-      vineyard: "",
-      block_id: "",
+      name: props.formFields.name,
+      email: props.formFields.email,
+      date: props.formFields.date,
+      variety: props.formFields.variety,
+      EL_stage: props.formFields.EL_stage,
+      vineyard: props.formFields.vineyard,
+      block_id: props.formFields.block_id,
       formErrors: {
         name: "",
         email: "",
@@ -49,33 +46,42 @@ class DatasetProfile extends Component {
     };
   }
 
+  componentDidUpdate() {
+    const { formErrors, ...formFields } = this.state;
+    localStorage.setItem("formFields", JSON.stringify(formFields));
+    localStorage.setItem("formTime", Date.now());
+  }
+
   handleSubmit = e => {
     e.preventDefault();
 
     const { user } = this.props;
     // console.log(this.props);
+    // If an user is logged in, update name and email
     if (user !== null && user.id > 0) {
       this.setState({
         name: user.name,
         email: user.email
       });
     }
+
+    const { formErrors, ...formFields } = this.state;
     if (formValid(this.state)) {
-      this.setState({ dataSaved: true });
-      this.props.isSaved(true);
+      // this.setState({ dataSaved: true });
+      this.props.saveForm(formFields);
       console.log(`
         --SUBMITTING--
-        Data Saved: ${this.state.dataSaved}
-        Name: ${this.state.name}
-        Email: ${this.state.email}
-        Date: ${this.state.date}
-        Variety: ${this.state.variety}
-        EL Stage: ${this.state.EL_stage}
-        Vineyard: ${this.state.vineyard},
-        Block ID: ${this.state.block_id},
+        Name: ${formFields.name}
+        Email: ${formFields.email}
+        Date: ${formFields.date}
+        Variety: ${formFields.variety}
+        EL Stage: ${formFields.EL_stage}
+        Vineyard: ${formFields.vineyard},
+        Block ID: ${formFields.block_id},
       `);
     } else {
-      this.props.isSaved(false);
+      // this.setState({ dataSaved: false });
+      // this.props.isSaved(false);
       console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
     }
   };
@@ -151,127 +157,111 @@ class DatasetProfile extends Component {
 
   renderProfile = () => {
     const { formErrors } = this.state;
-    if (this.state.dataSaved) {
-      return (
-        <div className="wrapper mb3">
-          <p className="f6 white db">Profile saved</p>
-          <div>
-            <ProfileCard state={this.state} />
-            <button
-              className="pbutton center"
-              onClick={() => {
-                this.setState({ dataSaved: false });
-                // this.props.isSaved(false);
-              }}
-            >
-              Edit
-            </button>
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="wrapper mb3">
-          <p className="f6 white db">
+    return (
+      <div className="wrapper mb3">
+        {/* <p className="">
             Please create your dateset profile first
-          </p>
-          <div className="profile form-wrapper tl">
-            <h1>Create Dataset</h1>
-            <form onSubmit={this.handleSubmit}>
-              {this.renderUser()}
-              <div className="date">
-                <label htmlFor="date">Date</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent w-100"
-                  value={this.state.date}
-                  type="date"
-                  name="date"
-                  id="date"
-                  onChange={this.handleChange}
-                  required
-                />
-                {formErrors.date.length > 0 && (
-                  <span className="errorMessage">{formErrors.date}</span>
-                )}
-              </div>
+          </p> */}
+        <div className="form-wrapper">
+          <h1>Create Dataset</h1>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderUser()}
+            <div className="date">
+              <label htmlFor="date">Date</label>
+              <input
+                className="input-reset"
+                value={this.state.date}
+                type="date"
+                name="date"
+                id="date"
+                onChange={this.handleChange}
+                required
+              />
+              {formErrors.date.length > 0 && (
+                <span className="errorMessage">{formErrors.date}</span>
+              )}
+            </div>
 
-              <div className="variety mt2">
-                <label htmlFor="variety">Variety</label>
-                <select
-                  className="pa2 input-reset ba bg-transparent w-100"
-                  value={this.state.variety}
-                  name="variety"
-                  id="variety"
-                  onChange={this.handleChange}
-                  required
-                >
-                  <option value="chardonay"> Chardonay </option>
-                  <option value="shiraz"> Shiraz </option>
-                </select>
-              </div>
+            <div className="variety mt2">
+              <label htmlFor="variety">Variety</label>
+              <select
+                className="pa2 input-reset ba bg-transparent w-100"
+                value={this.state.variety}
+                name="variety"
+                id="variety"
+                onChange={this.handleChange}
+                required
+              >
+                <option value="chardonay"> Chardonay </option>
+                <option value="shiraz"> Shiraz </option>
+              </select>
+            </div>
 
-              <div className="EL_stage mt2 ml2">
-                <label htmlFor="EL_stage">EL-Stage</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent w-100"
-                  value={this.state.EL_stage}
-                  type="number"
-                  name="EL_stage"
-                  id="EL_stage"
-                  min="15"
-                  max="20"
-                  onChange={this.handleChange}
-                  required
-                />
-              </div>
+            <div className="EL_stage mt2 ml2">
+              <label htmlFor="EL_stage">EL-Stage</label>
+              <input
+                className="pa2 input-reset ba bg-transparent w-100"
+                value={this.state.EL_stage}
+                type="number"
+                name="EL_stage"
+                id="EL_stage"
+                min="15"
+                max="20"
+                onChange={this.handleChange}
+                required
+              />
+            </div>
 
-              <div className="vineyard mt2">
-                <label htmlFor="vineyard">Vineyard</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent w-100"
-                  value={this.state.vineyard}
-                  type="text"
-                  name="vineyard"
-                  id="vineyard"
-                  maxLength="100"
-                  onChange={this.handleChange}
-                  required
-                />
-              </div>
+            <div className="vineyard mt2">
+              <label htmlFor="vineyard">Vineyard</label>
+              <input
+                className="pa2 input-reset ba bg-transparent w-100"
+                value={this.state.vineyard}
+                type="text"
+                name="vineyard"
+                id="vineyard"
+                maxLength="100"
+                onChange={this.handleChange}
+                required
+              />
+            </div>
 
-              <div className="block_id mt2 mb3">
-                <label htmlFor="block_id">Block ID</label>
-                <input
-                  className="pa2 input-reset ba bg-transparent w-100"
-                  value={this.state.block_id}
-                  type="text"
-                  name="block_id"
-                  id="block_id"
-                  maxLength="100"
-                  onChange={this.handleChange}
-                  required
-                />
-              </div>
+            <div className="block_id mt2 mb3">
+              <label htmlFor="block_id">Block ID</label>
+              <input
+                className="pa2 input-reset ba bg-transparent w-100"
+                value={this.state.block_id}
+                type="text"
+                name="block_id"
+                id="block_id"
+                maxLength="100"
+                onChange={this.handleChange}
+                required
+              />
+            </div>
 
-              <div className="createAccount">
-                <button className="pbutton" type="submit">
-                  Save Dataset
-                </button>
-                <div className="lh-copy mt0">
-                  <p className="f6 link dim black db pointer">
-                    Already have an account?
-                  </p>
-                </div>
+            <div className="createAccount">
+              <button
+                type="submit"
+                className="button radius bordered shadow success"
+              >
+                Save Dataset
+              </button>
+              <div className="lh-copy mt0">
+                <a href="/signin" className="pointer">
+                  Already have an account?
+                </a>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
-      );
-    }
+      </div>
+    );
+    // }
   };
 
   render() {
-    return <div>{this.renderProfile()}</div>;
+    return <div className="padding-top-1">{this.renderProfile()}</div>;
   }
 }
 

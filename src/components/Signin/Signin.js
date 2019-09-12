@@ -3,6 +3,8 @@ import React from "react";
 import firebase, { auth } from "../firebase/firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 
+import SigninHeader from "../../assets/SigninHeader.png";
+
 class Signin extends React.Component {
   constructor(props) {
     super(props);
@@ -64,48 +66,42 @@ class Signin extends React.Component {
   render() {
     // console.log(this.props);
     return (
-      <article className="br3 ba bg-white b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
-        <main className="pa4 black-80">
-          <div className="measure">
-            <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-              <legend className="f1 fw6 ph0 mh0">Sign In</legend>
-              <div className="mt3">
-                <label className="db fw6 lh-copy f6" htmlFor="email-address">
-                  Email
-                </label>
-                <input
-                  className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="email"
-                  name="email-address"
-                  id="email-address"
-                  onChange={this.onEmailChange}
-                />
-              </div>
-              <div className="mv3">
-                <label className="db fw6 lh-copy f6" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
-                  type="password"
-                  name="password"
-                  id="password"
-                  onChange={this.onPasswordChange}
-                />
-              </div>
-              <label className="pa0 ma0 lh-copy f6 pointer">
-                <input type="checkbox" /> Remember me
-              </label>
-            </fieldset>
-            <div className="">
-              <input
-                onClick={this.onSubmitSignIn}
-                className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-                type="submit"
-                value="Sign in"
-              />
-            </div>
+      <div className="row column medium-5 large-4 padding-top-1">
+        <div className="form-registration">
+          <figure className="form-registration-img">
+            <img src={SigninHeader} alt="Signin header" />
+            <figcaption className="form-registration-img-caption">
+              Experience everything Yeti+ has to offer through Yeti e-shoppe and
+              our related apps.
+            </figcaption>
+          </figure>
 
+          <div className="form-registration-group">
+            <input
+              className="form-registration-input"
+              type="email"
+              placeholder="Email"
+              name="email-address"
+              id="email-address"
+              onChange={this.onEmailChange}
+            />
+            <input
+              className="form-registration-input"
+              type="password"
+              placeholder="Password"
+              name="password"
+              id="password"
+              onChange={this.onPasswordChange}
+            />
+            <input
+              className="form-registration-submit-button"
+              type="submit"
+              value="Sign in"
+              onClick={this.onSubmitSignIn}
+            />
+            <p className="or-divider">
+              <span>or</span>
+            </p>
             {this.state.firebaseAuth ? (
               <button onClick={() => auth.signOut()}>Signout</button>
             ) : (
@@ -114,18 +110,19 @@ class Signin extends React.Component {
                 firebaseAuth={auth}
               />
             )}
-
-            <div className="lh-copy mt3">
-              <p
-                // onClick={() => onRouteChange("register")}
-                className="f6 link dim black db pointer"
-              >
-                Register
-              </p>
-            </div>
+            {/* <a className="form-registration-social-button" href="#">
+              <i className="fa fa-facebook-official" aria-hidden="true"></i>{" "}
+              Sign Up With facebook
+            </a> */}
+            <p className="form-registration-member-signin">
+              Not a member yet? <a href="/register">Register</a>
+            </p>
+            <p className="form-registration-terms">
+              <a href="/">Terms &amp; Conditions</a>|<a href="/">Privacy</a>
+            </p>
           </div>
-        </main>
-      </article>
+        </div>
+      </div>
     );
   }
 }

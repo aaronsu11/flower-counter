@@ -9,7 +9,7 @@ export const ProtectedRoute = ({
 }) => {
   // console.log("under PR");
   // console.log(rest);
-  console.log(user);
+  // console.log(user);
   return (
     <Route
       {...rest}
@@ -18,7 +18,7 @@ export const ProtectedRoute = ({
         // console.log(props);
         // console.log(rest);
         if (isSignedIn) {
-          return <Component {...props} user={user} />;
+          return <Component {...props} isSignedIn={isSignedIn} user={user} />;
         } else {
           return (
             <Redirect

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Recaptcha from "react-recaptcha";
 import { storage } from "../firebase/firebase";
-import "./ImageUpload.css";
+// import "./ImageUpload.scss";
 
 class ImageUpload extends Component {
   constructor(props) {
@@ -35,16 +35,36 @@ class ImageUpload extends Component {
         progresses: [...this.state.progresses, ...newProgresses]
       });
     }
+    // console.log(this.state);
   };
 
   handleUpload = () => {
+    const {
+      // name,
+      email,
+      date,
+      variety,
+      EL_stage,
+      vineyard,
+      block_id
+    } = this.props.formFields;
+    const { id } = this.props.user;
     if (this.state.recaptcha === false) {
       alert("Please verify recaptcha");
     } else {
       const { images } = this.state;
       // console.log(images);
       const storageRef = storage.ref();
-      const processingRef = storageRef.child("images");
+      var processingRef;
+      if (id === 0) {
+        processingRef = storageRef.child(
+          `images/${id}/${email}/${vineyard}/${block_id}/${variety}@${EL_stage}/${date}`
+        );
+      } else {
+        processingRef = storageRef.child(
+          `images/${id}/${vineyard}/${block_id}/${variety}@${EL_stage}/${date}`
+        );
+      }
       //Upload multiple images in parallel
       // const uploadTasks =
       images.map((image, index) => {
@@ -98,44 +118,112 @@ class ImageUpload extends Component {
     }
   };
 
-  renderProgress = () => {
+  renderStatus = () => {
     const { progresses, images } = this.state;
-    const listItems = progresses.map((progress, index) => {
+
+    const tableItems = images.map((image, index) => {
+      console.log(image);
+      const url = URL.createObjectURL(image);
+      // console.log(url);
       return (
-        <li>
-          <p>
-            {images[index].name} : {progress}
-          </p>
-        </li>
+        <tr key={index}>
+          <td>
+            <div className="flex-container align-justify align-top">
+              <div className="flex-child-shrink">
+                <img
+                  className="dashboard-table-image"
+                  src={url}
+                  alt="preview"
+                  height="50px"
+                  width="50px"
+                />
+              </div>
+              <div className="flex-child-grow">
+                <h6 className="dashboard-table-text">{image.name}</h6>
+                <span className="dashboard-table-timestamp">
+                  {image.size / 1000}KB
+                </span>
+              </div>
+            </div>
+          </td>
+          <td>{progresses[index]}</td>
+          <td className="bold">A Bold Line</td>
+          <td>A Date</td>
+        </tr>
       );
     });
-    return listItems;
+    return tableItems;
+  };
+
+  renderTable = () => {
+    return (
+      <table className="dashboard-table">
+        <colgroup>
+          <col width="150" />
+          <col width="80" />
+          <col width="100" />
+          <col width="60" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>
+              <a href="/">
+                Image Preview <i className="fa fa-caret-down"></i>
+              </a>
+            </th>
+            <th>
+              <a href="/">
+                Status <i className="fa fa-caret-down"></i>
+              </a>
+            </th>
+            <th>
+              <a href="/">
+                Count <i className="fa fa-caret-down"></i>
+              </a>
+            </th>
+            <th>
+              <a href="/">
+                Some data <i className="fa fa-caret-down"></i>
+              </a>
+            </th>
+          </tr>
+        </thead>
+        <tbody>{this.renderStatus()}</tbody>
+      </table>
+    );
   };
 
   render() {
+    const {
+      date,
+      variety,
+      EL_stage,
+      vineyard,
+      block_id
+    } = this.props.formFields;
     return (
       <div>
-        <div class="work-feature-block row">
-          <div class="columns medium-8">
+        <div className="work-feature-block row">
+          <div className="row column medium-8 container">
             <img
+              className="thumbnail work-feature-block-image margin-top-1"
+              height="500px"
+              width="650px"
               src={
-                this.state.urls[0] || "https://dummyimage.com/640x480/fff/fff"
+                this.state.urls[0] || "https://dummyimage.com/650x500/fff/fff"
               }
               alt="Uploaded images"
-              height="480"
-              width="640"
-              class="shadow"
             />
           </div>
 
-          <div class="columns medium-4">
-            <h2 class="work-feature-block-header">Dataset Description</h2>
-            <ul class="clean-list margin-top-2">
-              <li>Date: </li>
-              <li>Variety: </li>
-              <li>EL Stage: </li>
-              <li>Vinyard: </li>
-              <li>Block ID: </li>
+          <div className="column medium-4">
+            <h2 className="work-feature-block-header">Dataset Description</h2>
+            <ul className="clean-list margin-top-1">
+              <li>Date: {date}</li>
+              <li>Variety: {variety}</li>
+              <li>EL Stage: {EL_stage}</li>
+              <li>Vinyard: {vineyard}</li>
+              <li>Block ID: {block_id}</li>
             </ul>
             <input
               id="img_input"
@@ -156,35 +244,62 @@ class ImageUpload extends Component {
             >
               Upload
             </button>
+            <button
+              type="button"
+              className="button radius bordered shadow success margin-top-1"
+              onClick={() => {
+                // this.setState({ dataSaved: false });
+                this.props.isSaved(false);
+              }}
+            >
+              Edit Profile
+            </button>
           </div>
         </div>
 
-        <div class="work-feature-block row">
+        <div className="work-feature-block row">
           <div
             data-closable="fade-out"
-            class="todo-list-card card columns medium-8"
+            className="todo-list-card card columns medium-9"
           >
-            <div class="card-divider">
+            <div className="card-divider">
               <h3>Upload Progress</h3>
             </div>
-            <div class="card-section">
-              <ul>{this.renderProgress()}</ul>
+            <div className="card-section">
+              {/* <ul>{this.renderProgress()}</ul> */}
+              {this.renderTable()}
             </div>
           </div>
-          <div class="columns medium-4">
+          <div className="columns medium-3">
             <div
-              class="clipped-circle-graph margin-left-3 margin-top-2"
+              className="clipped-circle-graph margin-left-3 margin-top-2"
               data-clipped-circle-graph
               data-percent="50"
             >
-              <div class="clipped-circle-graph-progress">
-                <div class="clipped-circle-graph-progress-fill"></div>
+              <div className="clipped-circle-graph-progress">
+                <div className="clipped-circle-graph-progress-fill"></div>
               </div>
-              <div class="clipped-circle-graph-percents">
-                <div class="clipped-circle-graph-percents-wrapper">
-                  <span class="clipped-circle-graph-percents-number"></span>
-                  <span class="clipped-circle-graph-percents-units">
-                    of 100
+              <div className="clipped-circle-graph-percents">
+                <div className="clipped-circle-graph-percents-wrapper">
+                  {/* // Animation for circle progress indicator -> need Sass manipulation
+                  {    $("[data-clipped-circle-graph]").each(function() {
+                        var $graph = $(this),
+                          percent = parseInt($graph.data("percent"), 10),
+                          deg = 30 + (300 * percent) / 100;
+                        if (percent > 50) {
+                          $graph.addClass("gt-50");
+                        }
+                        $graph
+                          .find(".clipped-circle-graph-progress-fill")
+                          .css("transform", "rotate(" + deg + "deg)");
+                        $graph.find(".clipped-circle-graph-percents-number").html(percent + "%");
+                      });
+                  } */}
+                  <span className="clipped-circle-graph-percents-number">
+                    {this.state.urls.length}
+                  </span>
+                  <span className="clipped-circle-graph-percents-units">
+                    of {this.state.images.length}
                   </span>
                 </div>
               </div>

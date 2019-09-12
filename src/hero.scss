@@ -1,0 +1,21 @@
+#hero {
+  margin: 0px;
+  background-image: url(http://www.robotics.unsw.edu.au/srv/images/header-1.JPG);
+  background-size: cover;
+  background-position: center center;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  z-index: 0;
+}
+
+#hero-overlay {
+  position: relative;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
