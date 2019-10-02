@@ -17,11 +17,13 @@ import Rank from "./components/Rank/Rank";
 
 //Imported containers
 import { ProtectedRoute } from "./containers/ProtectedRoute";
-import Home from "./containers/Home";
+import Counter from "./containers/Counter";
 import Dashboard from "./containers/Dashboard";
 
-// const hostURL = "https://cryptic-beyond-77196.herokuapp.com/";
-const hostURL = "https://affable-tangent-247104.appspot.com/";
+// const hostURL = "https://cryptic-beyond-77196.herokuapp.com/"; //Heroku server
+const hostURL = "https://affable-tangent-247104.appspot.com/"; //GCP server
+// const apiURL = "http://localhost:5000/";
+const apiURL = "https://python-dot-affable-tangent-247104.appspot.com/";
 
 // const particlesOptions = {
 // };
@@ -38,6 +40,7 @@ const initialState = {
   }
 };
 
+// App container control user info
 class App extends Component {
   constructor() {
     super();
@@ -82,13 +85,18 @@ class App extends Component {
                 exact
                 path="/"
                 render={props => (
-                  <Home {...props} user={user} isSignedIn={isSignedIn} />
+                  <Counter
+                    {...props}
+                    user={user}
+                    isSignedIn={isSignedIn}
+                    apiURL={apiURL}
+                  />
                 )}
               />
               <ProtectedRoute
                 exact
                 path="/home"
-                component={Home}
+                component={Counter}
                 user={user}
                 isSignedIn={isSignedIn}
               />

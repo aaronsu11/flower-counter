@@ -23,6 +23,25 @@ const formValid = ({ formErrors, ...rest }) => {
   return valid;
 };
 
+const initialState = {
+  name: "",
+  email: "",
+  date: "",
+  variety: "chardonnay",
+  EL_stage: 15,
+  vineyard: "",
+  block_id: "",
+  formErrors: {
+    name: "",
+    email: "",
+    date: "",
+    variety: "",
+    EL_stage: "",
+    vineyard: "",
+    block_id: ""
+  }
+};
+
 class DatasetProfile extends Component {
   constructor(props) {
     super(props);
@@ -44,46 +63,18 @@ class DatasetProfile extends Component {
         block_id: ""
       }
     };
+    // props.setStage(1);
   }
 
   componentDidUpdate() {
-    const { formErrors, ...formFields } = this.state;
-    localStorage.setItem("formFields", JSON.stringify(formFields));
-    localStorage.setItem("formTime", Date.now());
+    // const { formErrors, ...formFields } = this.state;
+    // localStorage.setItem("formFields", JSON.stringify(formFields));
+    // localStorage.setItem("formTime", Date.now());
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    const { user } = this.props;
-    // console.log(this.props);
-    // If an user is logged in, update name and email
-    if (user !== null && user.id > 0) {
-      this.setState({
-        name: user.name,
-        email: user.email
-      });
-    }
-
-    const { formErrors, ...formFields } = this.state;
-    if (formValid(this.state)) {
-      // this.setState({ dataSaved: true });
-      this.props.saveForm(formFields);
-      console.log(`
-        --SUBMITTING--
-        Name: ${formFields.name}
-        Email: ${formFields.email}
-        Date: ${formFields.date}
-        Variety: ${formFields.variety}
-        EL Stage: ${formFields.EL_stage}
-        Vineyard: ${formFields.vineyard},
-        Block ID: ${formFields.block_id},
-      `);
-    } else {
-      // this.setState({ dataSaved: false });
-      // this.props.isSaved(false);
-      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
-    }
+  resetForm = () => {
+    this.setState(initialState);
+    this.props.reset();
   };
 
   // Set Error Messages
@@ -109,6 +100,38 @@ class DatasetProfile extends Component {
     }
     // this.setState({ formErrors, [name]: value }, () => console.log(this.state));
     this.setState({ formErrors, [name]: value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+
+    const { user } = this.props;
+    // console.log(this.props);
+    // If an user is logged in, update name and email
+    if (user !== null && user.id > 0) {
+      this.setState({
+        name: user.name,
+        email: user.email
+      });
+    }
+
+    const { formErrors, ...formFields } = this.state;
+    if (formValid(this.state)) {
+      this.props.saveForm(formFields);
+      this.props.setStage(2);
+      console.log(`
+        --SUBMITTING--
+        Name: ${formFields.name}
+        Email: ${formFields.email}
+        Date: ${formFields.date}
+        Variety: ${formFields.variety}
+        EL Stage: ${formFields.EL_stage}
+        Vineyard: ${formFields.vineyard},
+        Block ID: ${formFields.block_id},
+      `);
+    } else {
+      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
+    }
   };
 
   renderUser = () => {
@@ -192,7 +215,7 @@ class DatasetProfile extends Component {
                 onChange={this.handleChange}
                 required
               >
-                <option value="chardonay"> Chardonay </option>
+                <option value="chardonnay"> Chardonnay </option>
                 <option value="shiraz"> Shiraz </option>
               </select>
             </div>
@@ -247,6 +270,9 @@ class DatasetProfile extends Component {
               >
                 Save Dataset
               </button>
+              {/* <button type="button" onClick={this.resetForm}>
+                Reset
+              </button> */}
               <div className="lh-copy mt0">
                 <a href="/signin" className="pointer">
                   Already have an account?

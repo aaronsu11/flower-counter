@@ -4,23 +4,25 @@ import React, { Component } from "react";
 import { BreadcrumbNav } from "../components/BreadcrumbNav/BreadcrumbNav";
 import DatasetProfile from "../components/DatasetProfile/DatasetProfile";
 import ImageUpload from "../components/ImageUpload/ImageUpload";
-
+import DatasetReport from "../components/DatasetReport/DatasetReport";
 // import { Link, Button, Colors } from "react-foundation";
 
 const initialState = {
-  dataSaved: false,
+  stage: 1,
+  batchID: "",
   formFields: {
     name: "",
     email: "",
     date: "",
-    variety: "chardonay",
+    variety: "chardonnay",
     EL_stage: 15,
     vineyard: "",
     block_id: ""
   }
 };
 
-class Home extends Component {
+// Counter container control steps and dataset info
+class Counter extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
@@ -36,8 +38,8 @@ class Home extends Component {
       if (localStorage.getItem("formFields")) {
         this.state.formFields = JSON.parse(localStorage.getItem("formFields"));
       }
-      if (localStorage.getItem("dataSaved")) {
-        this.state.dataSaved = JSON.parse(localStorage.getItem("dataSaved"));
+      if (localStorage.getItem("stage")) {
+        this.state.stage = JSON.parse(localStorage.getItem("stage"));
       }
     }
 
@@ -47,34 +49,76 @@ class Home extends Component {
     }
   }
 
-  componentDidMount() {}
-
   componentDidUpdate() {
-    localStorage.setItem("dataSaved", this.state.dataSaved);
-    localStorage.setItem("saveTime", Date.now());
+    // console.log(this.state);
   }
 
-  isSaved = saved => {
-    this.setState({ dataSaved: saved });
+  resetCounter = () => {
+    if (localStorage.getItem("saveTime")) {
+      console.log("clean local storage");
+      localStorage.removeItem("saveTime");
+      localStorage.removeItem("stage");
+    }
+    this.setState(initialState);
+  };
+
+  resetForm = () => {
+    if (localStorage.getItem("formFields")) {
+      console.log("clean form storage");
+      localStorage.removeItem("formFields");
+      // localStorage.removeItem("formTime");
+    }
+    this.resetCounter();
+    console.log(this.state);
+  };
+
+  setStage = stage => {
+    this.setState({ stage });
+    localStorage.setItem("stage", stage);
+    localStorage.setItem("saveTime", Date.now());
+  };
+
+  setBatchID = id => {
+    this.setState({ batchID: id });
+  };
+
+  setResults = (names, results) => {
+    this.setState({ imageNames: names, results: results });
   };
 
   saveForm = formFields => {
     this.setState({ formFields: formFields });
-    this.isSaved(true);
+    localStorage.setItem("formFields", JSON.stringify(formFields));
+    // localStorage.setItem("formTime", Date.now());
   };
 
   renderLayout = () => {
     const { user } = this.props;
-    const { dataSaved, formFields } = this.state;
+    const { stage, formFields, batchID } = this.state;
     // console.log(this.state);
-    if (dataSaved) {
+    if (stage === 4) {
+      return (
+        <div>
+          <DatasetReport
+            user={user}
+            formFields={formFields}
+            batchID={batchID}
+            setStage={this.setStage}
+            apiURL={this.props.apiURL}
+            reset={this.resetCounter}
+          />
+        </div>
+      );
+    } else if (stage >= 2) {
       return (
         <div>
           {/* <Rank name={user.name} entries={user.entries} /> */}
           <ImageUpload
             user={user}
             formFields={formFields}
-            isSaved={this.isSaved}
+            setStage={this.setStage}
+            setBatchID={this.setBatchID}
+            apiURL={this.props.apiURL}
           />
         </div>
       );
@@ -84,7 +128,9 @@ class Home extends Component {
           <DatasetProfile
             user={user}
             formFields={formFields}
+            setStage={this.setStage}
             saveForm={this.saveForm}
+            reset={this.resetForm}
           />
         </div>
       );
@@ -92,13 +138,14 @@ class Home extends Component {
   };
 
   render() {
+    // console.log(this.state);
     return (
       <div>
-        <BreadcrumbNav state={this.state.dataSaved} />
+        <BreadcrumbNav stage={this.state.stage} />
         {this.renderLayout()}
       </div>
     );
   }
 }
 
-export default Home;
+export default Counter;

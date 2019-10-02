@@ -1,14 +1,21 @@
 import React from "react";
 
-export const BreadcrumbNav = ({ state }) => {
+const checkStage = (stage, tag) => {
+  if (stage === tag) {
+    return "breadcrumb-counter-nav-item current";
+  } else {
+    return "breadcrumb-counter-nav-item";
+  }
+};
+
+export const BreadcrumbNav = ({ stage }) => {
   // console.log(state);
   return (
     <ul className="breadcrumb-counter-nav">
-      <li className="breadcrumb-counter-nav-item">Setup</li>
-      <li className="breadcrumb-counter-nav-item current">Sample Analysis</li>
-      <li className="breadcrumb-counter-nav-item">Sort Layout</li>
-      <li className="breadcrumb-counter-nav-item">Sort</li>
-      <li className="breadcrumb-counter-nav-item">Reporting</li>
+      <li className={checkStage(stage, 1)}>Dataset Info</li>
+      <li className={checkStage(stage, 2)}>Choose Images</li>
+      <li className={checkStage(stage, 3)}>Progresses</li>
+      <li className={checkStage(stage, 4)}>Report</li>
     </ul>
   );
 };

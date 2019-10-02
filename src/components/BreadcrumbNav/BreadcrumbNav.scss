@@ -11,6 +11,7 @@ body {
   display: flex;
   width: 100%;
   list-style: none;
+  color: $font-color;
   background: $nav-background;
 
   .breadcrumb-counter-nav-item {
