@@ -5,13 +5,14 @@ import "firebase/auth";
 // Initialize Firebase
 // Your web app's Firebase configuration
 var firebaseConfig = {
-  apiKey: "AIzaSyBE-xgkJMD5o1hgU_C_dx82lfMFW7HKQe0",
-  authDomain: "affable-tangent-247104.firebaseapp.com",
-  databaseURL: "https://affable-tangent-247104.firebaseio.com",
-  projectId: "affable-tangent-247104",
-  storageBucket: "affable-tangent-247104.appspot.com",
-  messagingSenderId: "44158393615",
-  appId: "1:44158393615:web:4328365a2657e8f6"
+  apiKey: "AIzaSyBmbEYCRih5N8ls-UYgv26OnAz67IDR8gk",
+  authDomain: "flower-counter.firebaseapp.com",
+  databaseURL: "https://flower-counter.firebaseio.com",
+  projectId: "flower-counter",
+  storageBucket: "flower-counter.appspot.com",
+  messagingSenderId: "276724841166",
+  appId: "1:276724841166:web:9a24d03f468502b5992e9f",
+  measurementId: "G-4HSDYZE7SQ"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

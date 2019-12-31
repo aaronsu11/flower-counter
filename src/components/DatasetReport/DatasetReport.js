@@ -4,7 +4,7 @@ export class DatasetReport extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sendEmail: false,
+      emailSent: false,
       report: {
         bss: "",
         size: "",
@@ -48,7 +48,7 @@ export class DatasetReport extends Component {
     })
       .then(response => response.json())
       .then(res => {
-        // console.log(res);
+        console.log(res);
         const { batch_info, ...report } = res.summary;
         // console.log(report);
         this.setState({ report });
@@ -57,6 +57,7 @@ export class DatasetReport extends Component {
   };
 
   render() {
+    const { bss, size, mean, stdev, max, min } = this.state.report;
     return (
       <div>
         <section className="product-feature-section">
@@ -68,15 +69,15 @@ export class DatasetReport extends Component {
                 <i className="fa fa-shield" aria-hidden="true"></i>
                 <div>
                   <p className="feature-title">Current Sample Size</p>
-                  <p className="feature-desc">{this.state.report.size}</p>
+                  <p className="feature-desc">{size}</p>
                 </div>
               </div>
 
               <div className="product-feature-section-feature top-right">
                 <i className="fa fa-heart" aria-hidden="true"></i>
                 <div>
-                  <p className="feature-title">Best Sample Size</p>
-                  <p className="feature-desc">{this.state.report.bss}</p>
+                  <p className="feature-title">Best Sample Size*</p>
+                  <p className="feature-desc">{bss}</p>
                 </div>
               </div>
 
@@ -84,7 +85,7 @@ export class DatasetReport extends Component {
                 <i className="fa fa-coffee" aria-hidden="true"></i>
                 <div>
                   <p className="feature-title">Mean</p>
-                  <p className="feature-desc">{this.state.report.mean}</p>
+                  <p className="feature-desc">{parseFloat(mean).toFixed(2)}</p>
                 </div>
               </div>
 
@@ -92,7 +93,7 @@ export class DatasetReport extends Component {
                 <i className="fa fa-map-marker" aria-hidden="true"></i>
                 <div>
                   <p className="feature-title">Standard Deviation</p>
-                  <p className="feature-desc">{this.state.report.stdev}</p>
+                  <p className="feature-desc">{parseFloat(stdev).toFixed(2)}</p>
                 </div>
               </div>
 
@@ -100,7 +101,7 @@ export class DatasetReport extends Component {
                 <i className="fa fa-coffee" aria-hidden="true"></i>
                 <div>
                   <p className="feature-title">Maximum Value</p>
-                  <p className="feature-desc">{this.state.report.max}</p>
+                  <p className="feature-desc">{parseFloat(max).toFixed(2)}</p>
                 </div>
               </div>
 
@@ -108,27 +109,45 @@ export class DatasetReport extends Component {
                 <i className="fa fa-map-marker" aria-hidden="true"></i>
                 <div>
                   <p className="feature-title">Minimum Value</p>
-                  <p className="feature-desc">{this.state.report.min}</p>
+                  <p className="feature-desc">{parseFloat(min).toFixed(2)}</p>
                 </div>
               </div>
             </div>
+            <p>
+              *Your sample size is
+              <b>{size >= bss ? " sufficient" : " insufficient"} </b>for this
+              dataset
+            </p>
+          </div>
+
+          <div className="row align-center">
+            <button
+              type="button"
+              className="button radius bordered shadow success margin-top-1 margin-right-1"
+              onClick={this.props.reset}
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              className="button radius bordered shadow success margin-top-1"
+              onClick={() => {
+                this.setState({ emailSent: true });
+                this.report(true);
+              }}
+              disabled={this.state.emailSent}
+            >
+              Email Report
+            </button>
           </div>
         </section>
-
-        <button
-          type="button"
-          className="button radius bordered shadow success margin-top-1"
-          onClick={this.props.reset}
-        >
-          Reset
-        </button>
-        <button
-          type="button"
-          className="button radius bordered shadow success margin-top-1"
-          onClick={() => this.report(true)}
-        >
-          Email Report
-        </button>
+        {this.state.emailSent ? (
+          <div className="callout alert-callout-border success">
+            <strong>Sent!</strong> - The report has been sent to your email!
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     );
   }

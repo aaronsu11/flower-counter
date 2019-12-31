@@ -1,242 +1,234 @@
 import React, { Component } from "react";
 
+import StatsCard from "../components/Card/StatsCard";
+// import DashboardCard from "../components/Card/DashboardCard";
 // import { Link, Button, Colors } from "react-foundation";
-// import "foundation-sites/dist/css/foundation.min.css";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSaved: false
+      sidebar: false,
+      type: "vineyardls",
+      content: "",
+      content_extra: "",
+      itemPage: 1,
+      records: [],
+      summary: {
+        size: 0,
+        mean: 0,
+        stdev: 0
+      }
     };
+    this.handleSearch("vineyardls", "");
   }
 
-  handleClick = e => {
+  handleSearch = (type, content) => {
+    const { id } = this.props.user;
+    // const { records } = this.state;
+    this.setState({ type, content });
+
+    if (type) {
+      fetch(this.props.apiURL + "list", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userid: id,
+          type: type,
+          content: content,
+          content_extra: ""
+        })
+      })
+        .then(response => response.json())
+        .then(res => {
+          console.log(res);
+          const { records, summary } = res;
+          this.setState({ records, summary });
+        });
+    }
+  };
+
+  handleChange = e => {
     e.preventDefault();
-    console.log("Clicked");
+    this.setState({ filter: e.target.value });
+  };
+
+  handleClick = (e, type) => {
+    e.preventDefault();
+    this.setState({ type });
+    this.handleSearch(type, this.state.content);
+    console.log(this.state);
+  };
+
+  toggleSidebar = () => {
+    const { sidebar } = this.state;
+    this.setState({ sidebar: !sidebar });
+  };
+
+  renderRecord = () => {
+    const { records, type } = this.state;
+    const list_items = records.map((record, index) => {
+      return (
+        <li
+          key={index}
+          className="list-group-item"
+          onClick={() => {
+            if (type === "vineyardls") {
+              this.setState({ content: record });
+            } else {
+              this.handleSearch(type, record);
+            }
+          }}
+        >
+          <b>Name: </b>
+          {record}
+          {/* {record.name} <b>Path: </b>
+          {record.path} <b>Count: </b>
+          {record.estimate} */}
+        </li>
+      );
+    });
+    return list_items;
   };
 
   render() {
+    const { sidebar, summary } = this.state;
     return (
-      <body>
-        <div className="app-dashboard shrink-medium">
-          <div className="row expanded app-dashboard-top-nav-bar">
-            <div className="columns medium-2">
+      <div
+        className={
+          "app-dashboard" + (sidebar ? " shrink-medium" : " shrink-large")
+        }
+      >
+        {/* Search Bar */}
+        <div className="row expanded app-dashboard-top-nav-bar">
+          {/* <div className="columns medium-2">
+            <button
+              data-toggle="app-dashboard-sidebar"
+              className="menu-icon hide-for-medium"
+            ></button>
+            <a className="app-dashboard-logo">Foundation</a>
+          </div> */}
+          <div className="columns show-for-medium">
+            <div className="app-dashboard-search-bar-container">
+              <input
+                className="app-dashboard-search"
+                type="search"
+                placeholder="Search"
+                onChange={this.handleChange}
+              />
               <button
-                data-toggle="app-dashboard-sidebar"
-                className="menu-icon hide-for-medium"
-              ></button>
-              <a href="/" className="app-dashboard-logo">
-                Foundation
-              </a>
-            </div>
-            <div className="columns show-for-medium">
-              <div className="app-dashboard-search-bar-container">
-                <input
-                  className="app-dashboard-search"
-                  type="search"
-                  placeholder="Search"
-                />
-                <i className="app-dashboard-search-icon fa fa-search"></i>
-              </div>
-            </div>
-            <div className="columns shrink app-dashboard-top-bar-actions">
-              <button href="#" className="button hollow">
-                Logout
+                className="app-dashboard-search-icon"
+                type="button"
+                onClick={this.handleSearch}
+              >
+                <i className="fa fa-search"></i>
               </button>
-              <a href="/" height="30" width="30" alt="">
-                <i className="fa fa-info-circle"></i>
-              </a>
             </div>
           </div>
+          {/* <div className="columns shrink app-dashboard-top-bar-actions">
+            <button href="#" className="button hollow">
+              Logout
+            </button>
+            <a href="#" height="30" width="30" alt="">
+              <i className="fa fa-info-circle"></i>
+            </a>
+          </div> */}
+        </div>
 
-          <div className="app-dashboard-body off-canvas-wrapper">
-            <div
-              id="app-dashboard-sidebar"
-              className="app-dashboard-sidebar position-left off-canvas off-canvas-absolute reveal-for-medium"
-              data-off-canvas
-            >
-              <div className="app-dashboard-sidebar-title-area">
-                <div className="app-dashboard-close-sidebar">
-                  <h3 className="app-dashboard-sidebar-block-title">Items</h3>
-                  {/* <!-- Close button --> */}
-                  <button
-                    id="close-sidebar"
-                    data-app-dashboard-toggle-shrink
-                    className="app-dashboard-sidebar-close-button show-for-medium"
-                    aria-label="Close menu"
-                    type="button"
-                  >
-                    <span aria-hidden="true">
-                      <a href="/">
-                        <i className="large fa fa-angle-double-left"></i>
-                      </a>
-                    </span>
-                  </button>
-                </div>
-                <div className="app-dashboard-open-sidebar">
-                  <button
-                    id="open-sidebar"
-                    data-app-dashboard-toggle-shrink
-                    className="app-dashboard-open-sidebar-button show-for-medium"
-                    aria-label="open menu"
-                    type="button"
-                  >
-                    <span aria-hidden="true">
-                      <a href="/">
-                        <i className="large fa fa-angle-double-right"></i>
-                      </a>
-                    </span>
-                  </button>
-                </div>
+        <div className="app-dashboard-body off-canvas-wrapper">
+          {/* Side Bar */}
+          <div
+            id="app-dashboard-sidebar"
+            className="app-dashboard-sidebar position-left off-canvas off-canvas-absolute reveal-for-medium"
+            data-off-canvas
+          >
+            <div className="app-dashboard-sidebar-title-area">
+              <div className="app-dashboard-close-sidebar">
+                <h3 className="app-dashboard-sidebar-block-title">Filter</h3>
+                {/* <!-- Close button --> */}
+                <button
+                  id="close-sidebar"
+                  className="app-dashboard-sidebar-close-button show-for-medium"
+                  aria-label="Close menu"
+                  type="button"
+                  onClick={this.toggleSidebar}
+                >
+                  <span aria-hidden="true">
+                    <i className="large fa fa-angle-double-left"></i>
+                  </span>
+                </button>
               </div>
-              <div className="app-dashboard-sidebar-inner">
-                <ul className="menu vertical">
-                  <li>
-                    <a href="/" className="is-active">
-                      <i className="large fa fa-institution"></i>
-                      <span className="app-dashboard-sidebar-text">
-                        Buildings
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <i className="large fa fa-hourglass"></i>
-                      <span className="app-dashboard-sidebar-text">Time</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <i className="large fa fa-industry"></i>
-                      <span className="app-dashboard-sidebar-text">
-                        Industry
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="is-active">
-                      <i className="large fa fa-institution"></i>
-                      <span className="app-dashboard-sidebar-text">
-                        Buildings
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <i className="large fa fa-hourglass"></i>
-                      <span className="app-dashboard-sidebar-text">Time</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <i className="large fa fa-industry"></i>
-                      <span className="app-dashboard-sidebar-text">
-                        Industry
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/" className="is-active">
-                      <i className="large fa fa-institution"></i>
-                      <span className="app-dashboard-sidebar-text">
-                        Buildings
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <i className="large fa fa-hourglass"></i>
-                      <span className="app-dashboard-sidebar-text">Time</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/">
-                      <i className="large fa fa-industry"></i>
-                      <span className="app-dashboard-sidebar-text">
-                        Industry
-                      </span>
-                    </a>
-                  </li>
+              <div className="app-dashboard-open-sidebar">
+                <button
+                  id="open-sidebar"
+                  className="app-dashboard-open-sidebar-button show-for-medium"
+                  aria-label="open menu"
+                  type="button"
+                  onClick={this.toggleSidebar}
+                >
+                  <span aria-hidden="true">
+                    <i className="large fa fa-angle-double-right"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div className="app-dashboard-sidebar-inner">
+              <ul className="menu vertical">
+                <li>
+                  <a
+                    href="/"
+                    className="is-active"
+                    onClick={e => this.handleClick(e, "blockls")}
+                  >
+                    <i className="large fa fa-institution"></i>
+                    <span className="app-dashboard-sidebar-text">By Block</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/" onClick={e => this.handleClick(e, "datels")}>
+                    <i className="large fa fa-hourglass"></i>
+                    <span className="app-dashboard-sidebar-text">By Time</span>
+                  </a>
+                </li>
+                {/* <li>
+                  <a href="/">
+                    <i className="large fa fa-industry"></i>
+                    <span className="app-dashboard-sidebar-text">Industry</span>
+                  </a>
+                </li> */}
+              </ul>
+            </div>
+          </div>
+          {/* Content */}
+          <div
+            className="app-dashboard-body-content off-canvas-content"
+            data-off-canvas-content
+          >
+            <h2 className="text-center">Search Records</h2>
+            <p className="text-center">
+              Please type in the keywords in the search bar. A list of records
+              and their statistical summary will be generated
+            </p>
+
+            <div className="row align-spaced">
+              <div className="column small-4">
+                {/* <StatsCard stats={summary} /> */}
+              </div>
+              <div className="column small-8">
+                <ul className="list-group">
+                  {/* <li className="list-group-item active">
+                    List Group Item 1 (Active)
+                  </li> */}
+                  {this.renderRecord()}
+                  {/* <li className="list-group-item disabled">
+                    List Group Item 4 (Disabled)
+                  </li> */}
                 </ul>
               </div>
             </div>
-
-            <div
-              className="app-dashboard-body-content off-canvas-content"
-              data-off-canvas-content
-            >
-              <h2 className="text-center">Lorem Ipsum</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-                blandit ligula eget est feugiat viverra. Duis a arcu laoreet,
-                rhoncus libero imperdiet, placerat velit. Vestibulum euismod mi
-                et ornare sodales. Donec efficitur mattis blandit. Proin in
-                massa elit. Praesent malesuada iaculis nisl, a venenatis dui.
-                Nullam venenatis tincidunt placerat. Suspendisse egestas urna a
-                aliquet pretium.
-              </p>
-
-              <p>
-                Curabitur ullamcorper mollis lobortis. Integer a scelerisque
-                turpis, sed dictum lorem. Pellentesque habitant morbi tristique
-                senectus et netus et malesuada fames ac turpis egestas. Nam quis
-                placerat sem. Suspendisse vulputate, leo ac sollicitudin
-                lobortis, dui dui blandit justo, ut molestie justo sem in ipsum.
-                Vestibulum convallis ex ac est tristique tincidunt. Vivamus dui
-                dui, viverra et urna vitae, aliquam facilisis erat. Nam lorem
-                nibh, elementum semper commodo at, fermentum quis justo. Donec
-                finibus sapien eget scelerisque rhoncus. Nullam at nisi sed mi
-                congue vestibulum. Vivamus nec scelerisque orci, vel fringilla
-                nisi. Sed dictum, leo in consectetur porttitor, quam nibh
-                aliquet nisi, in pulvinar sapien ante id dui. Aliquam massa
-                nisl, auctor eget nisl in, faucibus gravida lectus. Nullam
-                mattis orci at turpis finibus egestas. Nam vitae lorem accumsan,
-                tempus lectus vitae, rutrum diam. Integer pulvinar placerat
-                magna aliquam scelerisque.
-              </p>
-
-              <p>
-                Duis consectetur magna velit, nec porttitor velit fermentum
-                pulvinar. Duis varius justo eu varius pellentesque. Curabitur
-                aliquet velit mauris, quis aliquam leo pharetra in. Integer
-                rhoncus ut dui in rhoncus. Maecenas nec libero neque. Duis ac
-                lacus at justo ullamcorper efficitur. Praesent ornare urna ante.
-                Aliquam dapibus posuere nisl sit amet vestibulum. Quisque
-                dapibus iaculis justo non egestas. Curabitur interdum semper
-                justo, eget condimentum orci bibendum nec.
-              </p>
-
-              <p>
-                Vivamus pharetra massa non risus sollicitudin iaculis. Donec
-                semper finibus hendrerit. Nam ut volutpat mauris, sit amet
-                molestie nisi. Curabitur ac nisi urna. Nulla id turpis nec dui
-                ornare tempor in ac justo. Cras quis cursus nisi. Donec vel
-                pellentesque ante. Maecenas non nisi risus. Praesent posuere
-                scelerisque varius. Cras vitae mollis quam. Etiam ut dui massa.
-                Etiam mattis aliquam enim, eget facilisis erat elementum eu.
-                Proin et lorem volutpat, pretium massa a, venenatis mi.
-                Suspendisse quam orci, feugiat eget suscipit ac, vehicula a
-                ante. Nam ut mauris at tortor cursus interdum.
-              </p>
-
-              <p>
-                Nullam hendrerit tincidunt risus. Sed nec nibh vel nibh euismod
-                lobortis sed a sem. Nulla nec libero dolor. Pellentesque non
-                sodales orci. Phasellus odio ligula, varius non orci ac,
-                fermentum pulvinar nibh. Aliquam erat volutpat. Curabitur
-                vehicula varius porttitor. Integer purus sapien, placerat
-                sodales eros et, interdum vestibulum sem. Duis faucibus felis
-                vitae augue ultricies, aliquet tempor orci vestibulum. Duis eu
-                justo mi. Praesent feugiat, ante interdum fringilla auctor, ex
-                nibh aliquet neque, sed feugiat tellus tortor non dui.
-                Suspendisse potenti. Aliquam fringilla sapien felis, at faucibus
-                justo interdum congue.
-              </p>
-            </div>
           </div>
         </div>
-      </body>
+      </div>
     );
   }
 }

@@ -59,11 +59,13 @@
 @include foundation-prototype-classes;
 
 //Components
-@import "./hero.scss";
+@import "./containers/Background.scss";
+@import "./containers/Dashboard.scss";
 @import "./components/Navigation/Navigation.scss";
 @import "./components/BreadcrumbNav/BreadcrumbNav.scss";
 @import "./components/ImageUpload/ImageUpload.scss";
 @import "./components/DatasetReport/DatasetReport.scss";
 @import "./components/Signin/Signin.scss";
 @import "./components/Register/Register.scss";
-@import "./containers/Dashboard.scss";
+@import "./components/Card/DashboardCard.scss";
+@import "./components/Card/StatsCard.scss";

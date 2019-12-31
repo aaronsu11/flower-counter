@@ -112,7 +112,7 @@ class Register extends React.Component {
                 />
                 <Recaptcha
                   className="margin-bottom-1"
-                  sitekey="6LfWDbQUAAAAAMBcLHa6ld7lnDowMvC9gA-EKxga"
+                  sitekey="6LdclscUAAAAAAfz1i9Y-OGf-y0_1zwclxHNjCr-"
                   // render="explicit"
                   // onloadCallback={this.recaptchaLoaded}
                   verifyCallback={this.verifyRecaptcha}

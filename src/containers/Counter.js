@@ -33,7 +33,7 @@ class Counter extends Component {
     const now = new Date();
     const dataAge = Math.round((now - saveTime) / (1000 * 60)); // in minutes
     console.log(dataAge);
-    if (dataAge < 5) {
+    if (dataAge < 10) {
       console.log("Using data from local storage");
       if (localStorage.getItem("formFields")) {
         this.state.formFields = JSON.parse(localStorage.getItem("formFields"));
@@ -119,6 +119,7 @@ class Counter extends Component {
             setStage={this.setStage}
             setBatchID={this.setBatchID}
             apiURL={this.props.apiURL}
+            reset={this.resetCounter}
           />
         </div>
       );

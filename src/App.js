@@ -13,20 +13,17 @@ import Navigation from "./components/Navigation/Navigation";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 // import Logo from "./components/Logo/Logo";
-import Rank from "./components/Rank/Rank";
+// import Rank from "./components/Rank/Rank";
 
 //Imported containers
-import { ProtectedRoute } from "./containers/ProtectedRoute";
+// import { ProtectedRoute } from "./containers/ProtectedRoute";
 import Counter from "./containers/Counter";
-import Dashboard from "./containers/Dashboard";
+// import Dashboard from "./containers/Dashboard";
 
 // const hostURL = "https://cryptic-beyond-77196.herokuapp.com/"; //Heroku server
-const hostURL = "https://affable-tangent-247104.appspot.com/"; //GCP server
+const hostURL = "https://auth-dot-flower-counter.appspot.com/"; //GCP server
 // const apiURL = "http://localhost:5000/";
-const apiURL = "https://python-dot-affable-tangent-247104.appspot.com/";
-
-// const particlesOptions = {
-// };
+const apiURL = "https://flower-counter.appspot.com/";
 
 const initialState = {
   isAuth: false,
@@ -93,26 +90,13 @@ class App extends Component {
                   />
                 )}
               />
-              <ProtectedRoute
+              {/* <ProtectedRoute
                 exact
-                path="/home"
-                component={Counter}
-                user={user}
-                isSignedIn={isSignedIn}
-              />
-              <ProtectedRoute
-                exact
-                path="/dashboard"
+                path="/dashboard/:id"
                 component={Dashboard}
                 user={user}
                 isSignedIn={isSignedIn}
-              />
-              <Route
-                path="/home/:id"
-                render={props => (
-                  <Rank {...props} name={user.name} entries={user.entries} />
-                )}
-              />
+              /> */}
               <Route
                 exact
                 path="/signin"

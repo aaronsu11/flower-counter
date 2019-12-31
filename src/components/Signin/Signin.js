@@ -102,14 +102,17 @@ class Signin extends React.Component {
             <p className="or-divider">
               <span>or</span>
             </p>
-            {this.state.firebaseAuth ? (
-              <button onClick={() => auth.signOut()}>Signout</button>
-            ) : (
-              <StyledFirebaseAuth
-                uiConfig={this.uiConfig}
-                firebaseAuth={auth}
-              />
-            )}
+            <div className="row align-center">
+              {this.state.firebaseAuth ? (
+                <button onClick={() => auth.signOut()}>Signout</button>
+              ) : (
+                <StyledFirebaseAuth
+                  uiConfig={this.uiConfig}
+                  firebaseAuth={auth}
+                />
+              )}
+            </div>
+
             {/* <a className="form-registration-social-button" href="#">
               <i className="fa fa-facebook-official" aria-hidden="true"></i>{" "}
               Sign Up With facebook
