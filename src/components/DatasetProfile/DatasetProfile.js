@@ -46,13 +46,7 @@ class DatasetProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: props.formFields.name,
-      email: props.formFields.email,
-      date: props.formFields.date,
-      variety: props.formFields.variety,
-      EL_stage: props.formFields.EL_stage,
-      vineyard: props.formFields.vineyard,
-      block_id: props.formFields.block_id,
+      ...props.formFields,
       formErrors: {
         name: "",
         email: "",
@@ -63,13 +57,7 @@ class DatasetProfile extends Component {
         block_id: ""
       }
     };
-    // props.setStage(1);
-  }
-
-  componentDidUpdate() {
-    // const { formErrors, ...formFields } = this.state;
-    // localStorage.setItem("formFields", JSON.stringify(formFields));
-    // localStorage.setItem("formTime", Date.now());
+    // console.log(props);
   }
 
   resetForm = () => {
@@ -105,16 +93,6 @@ class DatasetProfile extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const { user } = this.props;
-    // console.log(this.props);
-    // If an user is logged in, update name and email
-    if (user !== null && user.id > 0) {
-      this.setState({
-        name: user.name,
-        email: user.email
-      });
-    }
-
     const { formErrors, ...formFields } = this.state;
     if (formValid(this.state)) {
       this.props.saveForm(formFields);
@@ -137,7 +115,7 @@ class DatasetProfile extends Component {
   renderUser = () => {
     const { formErrors } = this.state;
     const { user } = this.props;
-    if (user !== null && user.id > 0) {
+    if (user && user.uid) {
       return;
     } else {
       return (

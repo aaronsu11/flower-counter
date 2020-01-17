@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import Particles from "react-particles-js";
-import { auth } from "./components/firebase/firebase";
+// import { auth } from "./components/firebase/firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // import Foundation, { Button, Colors } from "react-foundation";
@@ -10,8 +10,8 @@ import "./App.scss";
 
 //Imported inidividual components
 import Navigation from "./components/Navigation/Navigation";
-import Signin from "./components/Signin/Signin";
-import Register from "./components/Register/Register";
+// import Signin from "./components/Signin/Signin";
+// import Register from "./components/Register/Register";
 // import Logo from "./components/Logo/Logo";
 // import Rank from "./components/Rank/Rank";
 
@@ -21,20 +21,17 @@ import Counter from "./containers/Counter";
 // import Dashboard from "./containers/Dashboard";
 
 // const hostURL = "https://cryptic-beyond-77196.herokuapp.com/"; //Heroku server
-const hostURL = "https://auth-dot-flower-counter.appspot.com/"; //GCP server
-const consoleURL = "http://localhost:3000/auth/";
-// const apiURL = "http://localhost:5000/";
-const apiURL = "https://flower-counter.appspot.com/";
+// const hostURL = "https://auth-dot-flower-counter.appspot.com/"; //GCP server
+const consoleURL = "http://localhost:3000/";
+const apiURL = "http://localhost:5000/";
+// const apiURL = "https://flower-counter.appspot.com/";
 
 const initialState = {
-  isAuth: false,
   isSignedIn: false,
   user: {
-    id: 0,
-    name: "",
+    uid: "",
     email: "",
-    entries: 0,
-    joined: ""
+    name: ""
   }
 };
 
@@ -45,29 +42,23 @@ class App extends Component {
     this.state = initialState;
   }
 
-  login = (data, isAuth) => {
+  login = user => {
     localStorage.setItem("dataSaved", false);
     localStorage.setItem("saveTime", Date.now());
     this.setState({
-      isAuth: isAuth,
       isSignedIn: true,
-      user: {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        entries: data.entries,
-        joined: data.joined
-      }
+      user
     });
-    // console.log(this.state);
+    console.log("log in");
   };
 
   logout = () => {
-    auth.signOut();
+    // auth.signOut();
     this.setState(initialState);
+    console.log("log out");
   };
 
-  componentDidMount = () => {};
+  // componentDidMount = () => {};
 
   // Main routing function
   render() {
@@ -85,6 +76,7 @@ class App extends Component {
                 render={props => (
                   <Counter
                     {...props}
+                    login={this.login}
                     user={user}
                     isSignedIn={isSignedIn}
                     apiURL={apiURL}
@@ -100,27 +92,43 @@ class App extends Component {
               /> */}
               <Route
                 exact
-                path="/signin"
-                render={props => (
-                  <Signin
-                    {...props}
-                    hostURL={hostURL}
-                    isSignedIn={isSignedIn}
-                    login={this.login}
-                  />
-                )}
+                path="/login"
+                render={props => {
+                  window.location.href = consoleURL + "auth/login-page/home";
+                  // <Signin
+                  //   {...props}
+                  //   hostURL={hostURL}
+                  //   isSignedIn={isSignedIn}
+                  //   login={this.login}
+                  // />
+                }}
               />
               <Route
                 exact
                 path="/register"
-                render={props => (
-                  <Register
-                    {...props}
-                    hostURL={hostURL}
-                    isSignedIn={isSignedIn}
-                    login={this.login}
-                  />
-                )}
+                render={props => {
+                  window.location.href = consoleURL + "auth/register-page/home";
+                  // <Register
+                  //   {...props}
+                  //   hostURL={hostURL}
+                  //   isSignedIn={isSignedIn}
+                  //   login={this.login}
+                  // />
+                }}
+              />
+              <Route
+                exact
+                path="/console"
+                render={props => {
+                  window.location.href = consoleURL + "admin";
+                }}
+              />
+              <Route
+                exact
+                path="/logout"
+                render={props => {
+                  window.location.href = consoleURL + "admin/logout";
+                }}
               />
               <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>

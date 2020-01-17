@@ -143,7 +143,7 @@ class ImageUpload extends Component {
 
   // Calling counter API when upload finished
   callAPI = (index, name, path, batchID) => {
-    const { id } = this.props.user;
+    const { uid } = this.props.user;
     const {
       variety,
       EL_stage,
@@ -151,18 +151,18 @@ class ImageUpload extends Component {
       block_id,
       date
     } = this.props.formFields;
-    let label = `${variety}@${EL_stage}`;
     // const { name } = this.state.images[0];
     return fetch(this.props.apiURL + "add_task", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userid: id,
+        userid: uid,
         batchid: batchID,
         path: path,
-        label: label,
         vineyard: vineyard,
         block: block_id,
+        variety: variety,
+        el_stage: EL_stage,
         date: date,
         name: name
       })
@@ -182,32 +182,12 @@ class ImageUpload extends Component {
         console.log("API Error: ");
         console.log(error);
         console.log({
-          userid: id,
+          userid: uid,
           batchid: batchID,
           path: path,
-          label: label,
           name: name
         });
         throw error;
-      });
-  };
-
-  emailReport = (email, path, batchID) => {
-    const { id } = this.props.user;
-    fetch(this.props.apiURL + "report", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userid: id,
-        batchid: batchID,
-        email: email,
-        path: path
-      })
-    })
-      .then(response => response.json())
-      .then(res => {
-        // console.log(res);
-        console.log("Email sent");
       });
   };
 
@@ -316,7 +296,7 @@ class ImageUpload extends Component {
         vineyard,
         block_id
       } = this.props.formFields;
-      const { id } = this.props.user;
+      const { uid } = this.props.user;
 
       //Create a batch ID
       const batchID = getTimeID();
@@ -324,10 +304,10 @@ class ImageUpload extends Component {
 
       // Setting upload path
       let path;
-      if (id === 0) {
-        path = `images/${id}/${email}/${vineyard}/${block_id}/${variety}@${EL_stage}/${date}/`;
+      if (uid) {
+        path = `images/${uid}/${vineyard}/${block_id}/${variety}@${EL_stage}/${date}/`;
       } else {
-        path = `images/${id}/${vineyard}/${block_id}/${variety}@${EL_stage}/${date}/`;
+        path = `images/guest/${email}/${vineyard}/${block_id}/${variety}@${EL_stage}/${date}/`;
       }
 
       // Wait for all images to be uploaded and processed

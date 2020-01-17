@@ -17,8 +17,8 @@ const Navigation = ({ isSignedIn, logout }) => {
               <strong>Flower Counter</strong>
             </NavLink>
             <li>
-              <NavLink className="margin-left-1" to="/">
-                Home
+              <NavLink className="margin-left-1" to="/console">
+                Console
               </NavLink>
             </li>
             <li>
@@ -34,7 +34,7 @@ const Navigation = ({ isSignedIn, logout }) => {
             {isSignedIn ? (
               <ul className="menu simple vertical medium-horizontal">
                 <li>
-                  <NavLink to="/dashboard">
+                  <NavLink to="/console">
                     <button
                       type="button"
                       className="button hollow topbar-responsive-button"
@@ -44,20 +44,20 @@ const Navigation = ({ isSignedIn, logout }) => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink onClick={() => logout()} to="/">
-                    Sign Out
+                  <NavLink onClick={() => logout()} to="/logout">
+                    Log out
                   </NavLink>
                 </li>
               </ul>
             ) : (
               <ul className="menu simple vertical medium-horizontal">
                 <li>
-                  <NavLink to="/signin">
+                  <NavLink to="/login">
                     <button
                       type="button"
                       className="button hollow topbar-responsive-button"
                     >
-                      Sign in
+                      Log in
                     </button>
                   </NavLink>
                 </li>

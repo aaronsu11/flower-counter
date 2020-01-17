@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import queryString from "query-string";
 
 // import Rank from "../components/Rank/Rank";
 import { BreadcrumbNav } from "../components/BreadcrumbNav/BreadcrumbNav";
@@ -11,8 +12,8 @@ const initialState = {
   stage: 1,
   batchID: "",
   formFields: {
-    name: "",
     email: "",
+    name: "",
     date: "",
     variety: "chardonnay",
     EL_stage: 15,
@@ -26,7 +27,7 @@ class Counter extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
-    // console.log(this.props);
+
     // Check if local storage data available from last refresh
     const time = localStorage.getItem("saveTime");
     const saveTime = time && new Date(parseInt(time));
@@ -42,15 +43,11 @@ class Counter extends Component {
         this.state.stage = JSON.parse(localStorage.getItem("stage"));
       }
     }
-
-    if (this.props.isSignedIn) {
-      this.state.formFields.name = this.props.user.name;
-      this.state.formFields.email = this.props.user.email;
+    const profile = queryString.parse(this.props.location.search);
+    if (profile.uid && profile.name && profile.email) {
+      console.log(profile);
+      this.props.login(profile);
     }
-  }
-
-  componentDidUpdate() {
-    // console.log(this.state);
   }
 
   resetCounter = () => {
@@ -95,7 +92,6 @@ class Counter extends Component {
   renderLayout = () => {
     const { user } = this.props;
     const { stage, formFields, batchID } = this.state;
-    // console.log(this.state);
     if (stage === 4) {
       return (
         <div>
@@ -139,7 +135,6 @@ class Counter extends Component {
   };
 
   render() {
-    // console.log(this.state);
     return (
       <div>
         <BreadcrumbNav stage={this.state.stage} />

@@ -20,22 +20,22 @@ export class DatasetReport extends Component {
 
   report = sendEmail => {
     const {
-      name,
-      email,
       date,
       variety,
       EL_stage,
       vineyard,
       block_id
     } = this.props.formFields;
-    const { id } = this.props.user;
+    const { uid } = this.props.user;
+    const email = uid ? this.props.user.email : this.props.formFields.email;
+    const name = uid ? this.props.user.name : this.props.formFields.name;
 
     fetch(this.props.apiURL + "report", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         sendEmail: sendEmail,
-        userid: id,
+        userid: uid ? uid : "",
         batchid: this.props.batchID,
         email: email,
         name: name,
