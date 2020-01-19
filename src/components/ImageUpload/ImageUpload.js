@@ -142,7 +142,7 @@ class ImageUpload extends Component {
   }
 
   // Calling counter API when upload finished
-  callAPI = (index, name, url, batchID) => {
+  callAPI = (index, name, path, batchID) => {
     const { uid } = this.props.user;
     const {
       email,
@@ -165,7 +165,7 @@ class ImageUpload extends Component {
       body: JSON.stringify({
         userid: userid,
         batchid: batchID,
-        path: url,
+        path: path,
         vineyard: vineyard,
         block: block_id,
         variety: variety,
@@ -191,7 +191,7 @@ class ImageUpload extends Component {
         console.log({
           userid: userid,
           batchid: batchID,
-          path: url,
+          path: path,
           name: name
         });
         throw error;
@@ -253,9 +253,12 @@ class ImageUpload extends Component {
             .then(url => {
               const urlList = this.updateList(this.state.urls, index, url);
               this.setState({ urls: urlList });
-              // Call image processing API
-              console.log("Uploaded at", url);
-              return this.callAPI(index, image.name, url, batchID);
+              return urlList;
+            })
+            // Call image processing API
+            .then(() => {
+              console.log("Uploaded");
+              return this.callAPI(index, image.name, path, batchID);
             })
             .catch(error => {
               this.setState({ alert: true, error });
