@@ -94,7 +94,8 @@ class App extends Component {
                 exact
                 path="/login"
                 render={props => {
-                  window.location.href = consoleURL + "auth/login-page/home";
+                  window.location.href =
+                    consoleURL + "auth/login-page?source=home";
                   // <Signin
                   //   {...props}
                   //   hostURL={hostURL}
@@ -107,7 +108,8 @@ class App extends Component {
                 exact
                 path="/register"
                 render={props => {
-                  window.location.href = consoleURL + "auth/register-page/home";
+                  window.location.href =
+                    consoleURL + "auth/register-page?source=home";
                   // <Register
                   //   {...props}
                   //   hostURL={hostURL}
