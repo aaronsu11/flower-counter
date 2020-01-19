@@ -22,9 +22,9 @@ import Counter from "./containers/Counter";
 
 // const hostURL = "https://cryptic-beyond-77196.herokuapp.com/"; //Heroku server
 // const hostURL = "https://auth-dot-flower-counter.appspot.com/"; //GCP server
-const consoleURL = "http://localhost:3000/";
-const apiURL = "http://localhost:5000/";
-// const apiURL = "https://flower-counter.appspot.com/";
+const consoleURL = "http://console.flowercounter.yieldestimation.com/";
+// const apiURL = "http://localhost:5000/";
+const apiURL = "https://flower-counter.appspot.com/";
 
 const initialState = {
   isSignedIn: false,

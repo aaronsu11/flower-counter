@@ -1,6 +1,6 @@
 {
-  "name": "smart-viticulture",
-  "version": "0.9.0",
+  "name": "flower-counter",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^3.19.0",

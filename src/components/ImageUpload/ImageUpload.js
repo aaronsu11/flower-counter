@@ -145,18 +145,25 @@ class ImageUpload extends Component {
   callAPI = (index, name, path, batchID) => {
     const { uid } = this.props.user;
     const {
+      email,
       variety,
       EL_stage,
       vineyard,
       block_id,
       date
     } = this.props.formFields;
+    let userid;
+    if (uid) {
+      userid = uid;
+    } else {
+      userid = email;
+    }
     // const { name } = this.state.images[0];
     return fetch(this.props.apiURL + "add_task", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userid: uid,
+        userid: userid,
         batchid: batchID,
         path: path,
         vineyard: vineyard,
@@ -182,7 +189,7 @@ class ImageUpload extends Component {
         console.log("API Error: ");
         console.log(error);
         console.log({
-          userid: uid,
+          userid: userid,
           batchid: batchID,
           path: path,
           name: name
