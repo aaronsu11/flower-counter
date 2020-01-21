@@ -43,7 +43,7 @@ export class DatasetReport extends Component {
         variety: variety,
         el_stage: EL_stage,
         vineyard: vineyard,
-        block_id: block_id
+        block: block_id
       })
     })
       .then(response => response.json())
@@ -126,7 +126,7 @@ export class DatasetReport extends Component {
               className="button radius bordered shadow success margin-top-1 margin-right-1"
               onClick={this.props.reset}
             >
-              Reset
+              Create another dataset
             </button>
             <button
               type="button"

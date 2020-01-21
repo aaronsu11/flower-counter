@@ -56,7 +56,9 @@ class Counter extends Component {
       localStorage.removeItem("saveTime");
       localStorage.removeItem("stage");
     }
-    this.setState(initialState);
+    // v2.4 change
+    // this.setState(initialState);
+    this.setState({ stage: 1, batchID: "" });
   };
 
   resetForm = () => {
