@@ -164,38 +164,6 @@ class DatasetProfile extends Component {
               onChange={this.handleChange}
             />
           </FormGroup>
-          {/* <div className="name">
-            <label htmlFor="name">Name</label>
-            
-            <input
-              className={formErrors.name.length > 0 ? "error" : null}
-              placeholder="Name"
-              value={this.state.name}
-              type="text"
-              name="name"
-              required
-              onChange={this.handleChange}
-            />
-            {formErrors.name.length > 0 && (
-              <span className="errorMessage">{formErrors.name}</span>
-            )}
-          </div> */}
-
-          {/* <div className="email">
-            <label htmlFor="email">Email</label>
-            <input
-              className={formErrors.email.length > 0 ? "error" : null}
-              placeholder="Email"
-              value={this.state.email}
-              type="email"
-              name="email"
-              required
-              onChange={this.handleChange}
-            />
-            {formErrors.email.length > 0 && (
-              <span className="errorMessage">{formErrors.email}</span>
-            )}
-          </div> */}
         </div>
       );
     }
@@ -231,22 +199,6 @@ class DatasetProfile extends Component {
           </p> */}
 
             <H3 className="form-title">Create Dataset</H3>
-            {/* <FormGroup
-                helperText={true && "Helper text with details..."}
-                inline={false}
-                intent={Intent.NONE}
-                label={true && "Label"}
-                labelFor="text-input"
-                labelInfo={true && "(required)"}
-              >
-                <InputGroup
-                  id="text-input"
-                  placeholder="Placeholder text"
-                  intent={Intent.NONE}
-                  type={"text"}
-                  fill={false}
-                />
-              </FormGroup> */}
             {this.renderUser()}
             <div className="group-wrapper">
               <FormGroup
@@ -352,92 +304,6 @@ class DatasetProfile extends Component {
           </form>
         </Card>
       </div>
-
-      // <div className="date">
-      //   <label htmlFor="date">Date</label>
-      //   <input
-      //     className="input-reset"
-      //     value={this.state.date}
-      //     type="date"
-      //     name="date"
-      //     id="date"
-      //     onChange={this.handleChange}
-      //     required
-      //   />
-      //   {formErrors.date.length > 0 && (
-      //     <span className="errorMessage">{formErrors.date}</span>
-      //   )}
-      // </div>
-
-      // <div className="variety mt2">
-      //   <label htmlFor="variety">Variety</label>
-      //   <select
-      //     className="pa2 input-reset ba bg-transparent w-100"
-      //     value={this.state.variety}
-      //     name="variety"
-      //     id="variety"
-      //     onChange={this.handleChange}
-      //     required
-      //   >
-      //     <option value="chardonnay"> Chardonnay </option>
-      //     <option value="shiraz"> Shiraz </option>
-      //   </select>
-      // </div>
-
-      // <div className="EL_stage mt2 ml2">
-      //   <label htmlFor="EL_stage">EL-Stage</label>
-      //   <input
-      //     className="pa2 input-reset ba bg-transparent w-100"
-      //     value={this.state.EL_stage}
-      //     type="number"
-      //     name="EL_stage"
-      //     id="EL_stage"
-      //     min="15"
-      //     max="20"
-      //     onChange={this.handleChange}
-      //     required
-      //   />
-      // </div>
-
-      // <div className="vineyard mt2">
-      //   <label htmlFor="vineyard">Vineyard</label>
-      //   <input
-      //     className="pa2 input-reset ba bg-transparent w-100"
-      //     value={this.state.vineyard}
-      //     type="text"
-      //     name="vineyard"
-      //     id="vineyard"
-      //     maxLength="100"
-      //     onChange={this.handleChange}
-      //     required
-      //   />
-      // </div>
-
-      // <div className="block_id mt2 mb3">
-      //   <label htmlFor="block_id">Block ID</label>
-      //   <input
-      //     className="pa2 input-reset ba bg-transparent w-100"
-      //     value={this.state.block_id}
-      //     type="text"
-      //     name="block_id"
-      //     id="block_id"
-      //     maxLength="100"
-      //     onChange={this.handleChange}
-      //     required
-      //   />
-      // </div>
-
-      // <div className="createAccount">
-      //   <button
-      //     type="submit"
-      //     className="button radius bordered shadow success"
-      //   >
-      //     Save Dataset
-      //   </button>
-      //   <button type="button" onClick={this.resetForm}>
-      //       Reset
-      //     </button>
-      // </div>
     );
   };
 
