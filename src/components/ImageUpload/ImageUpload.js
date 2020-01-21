@@ -176,7 +176,7 @@ class ImageUpload extends Component {
     })
       .then(response => response.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         const resultList = this.updateList(
           this.state.results,
           index,
@@ -284,6 +284,8 @@ class ImageUpload extends Component {
   handleUpload = async () => {
     if (this.state.recaptcha === false) {
       alert("Please verify recaptcha");
+    } else if (this.state.images.length === 0) {
+      alert("Please upload at least 1 image");
     } else {
       if (this.checkImages() === false && !this.state.fileCheck) {
         this.setState({ alert: true });
@@ -500,14 +502,14 @@ class ImageUpload extends Component {
           <thead>
             <tr>
               <th>
-                <a href="/">
+                <button>
                   Image Preview <i className="fa fa-caret-down"></i>
-                </a>
+                </button>
               </th>
               <th>
-                <a href="/">
+                <button>
                   Upload Progress <i className="fa fa-caret-down"></i>
-                </a>
+                </button>
               </th>
               {/* <th>
                 <a href="/">
@@ -515,14 +517,14 @@ class ImageUpload extends Component {
                 </a>
               </th> */}
               <th>
-                <a href="/">
+                <button>
                   Estimated <i className="fa fa-caret-down"></i>
-                </a>
+                </button>
               </th>
               <th>
-                <a href="/">
+                <button>
                   Status <i className="fa fa-caret-down"></i>
-                </a>
+                </button>
               </th>
             </tr>
           </thead>

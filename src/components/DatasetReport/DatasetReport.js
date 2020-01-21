@@ -48,7 +48,7 @@ export class DatasetReport extends Component {
     })
       .then(response => response.json())
       .then(res => {
-        console.log(res);
+        // console.log(res);
         const { batch_info, ...report } = res.summary;
         // console.log(report);
         this.setState({ report });
