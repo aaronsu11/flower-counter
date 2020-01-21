@@ -656,7 +656,14 @@ class ImageUpload extends Component {
                 })}
               </div>
               <div className="helper-text">
-                {images.length > 0 ? <p></p> : <p>Drag and Drop Images Here</p>}
+                {images.length > 0 ? (
+                  <p></p>
+                ) : (
+                  <div>
+                    <p> Drag and Drop Images Here</p>
+                    <p>(at least 2 for valid stats result)</p>
+                  </div>
+                )}
               </div>
               <div className="file-browser-container">
                 <AnchorButton
