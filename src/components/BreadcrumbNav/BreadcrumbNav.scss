@@ -20,11 +20,6 @@ body {
     padding: 1rem 2rem;
     text-align: center;
     vertical-align: middle;
-    cursor: pointer;
-
-    &:hover {
-      background: darken($nav-background, 10%);
-    }
 
     &::before {
       counter-increment: section;

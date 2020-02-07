@@ -11,7 +11,9 @@ const Navigation = ({ isSignedIn, logout }) => {
               data-responsive-toggle="topbar-responsive"
               data-hide-for="medium"
             >
-              <button className="menu-icon" type="button" data-toggle></button>
+              <a href="/">
+                <button className="menu-icon" />
+              </a>
             </span>
             <NavLink className="topbar-responsive-logo margin-left-1" to="/">
               <strong>Flower Counter</strong>
@@ -22,10 +24,10 @@ const Navigation = ({ isSignedIn, logout }) => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/">About</NavLink>
+              <NavLink to="/about">About</NavLink>
             </li>
             <li>
-              <NavLink to="/">Contact Us</NavLink>
+              <NavLink to="/contact">Contact Us</NavLink>
             </li>
           </ul>
         </div>

@@ -1,24 +1,17 @@
 import React, { Component } from "react";
-// import Particles from "react-particles-js";
-// import { auth } from "./components/firebase/firebase";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
-// import Foundation, { Button, Colors } from "react-foundation";
 
 //Imported style files (Zurb Foundation framework)
 import "./App.scss";
 
 //Imported inidividual components
 import Navigation from "./components/Navigation/Navigation";
-// import Signin from "./components/Signin/Signin";
-// import Register from "./components/Register/Register";
-// import Logo from "./components/Logo/Logo";
-// import Rank from "./components/Rank/Rank";
 
 //Imported containers
 // import { ProtectedRoute } from "./containers/ProtectedRoute";
 import Counter from "./containers/Counter";
-// import Dashboard from "./containers/Dashboard";
+import AboutPage from "./components/AboutPage/AboutPage";
+import ContactPage from "./components/ContactPage/ContactPage";
 
 // const hostURL = "https://cryptic-beyond-77196.herokuapp.com/"; //Heroku server
 // const hostURL = "https://auth-dot-flower-counter.appspot.com/"; //GCP server
@@ -83,6 +76,8 @@ class App extends Component {
                   />
                 )}
               />
+              <Route exact path="/about" render={props => <AboutPage />} />
+              <Route exact path="/contact" render={props => <ContactPage />} />
               {/* <ProtectedRoute
                 exact
                 path="/dashboard/:id"
